@@ -1,6 +1,9 @@
 name: release
 
-on: push
+on:
+  push:
+    tags:
+      - "v*.*.*"
 
 jobs:
   release:
@@ -16,6 +19,7 @@ jobs:
       run: |
         dotnet build UnlimitedReroll -o bin --configuration Release
         echo ${{ github.sha }} > Release.txt
+        cat Release.txt
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
