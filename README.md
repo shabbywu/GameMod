@@ -5,3 +5,13 @@
 # Mod 介绍
 ## UnlimitedReroll(无限重投)
 使用该 Mod 后, 升级后将可无限刷新加点选项.
+
+## MultipleGain(多倍收益)
+使用该 Mod 后, 可根据配置提高每晚的收益(经验和污秽精华)
+
+
+# FAQ
+1. 如何开发新的 Mod
+```bash
+dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n MultipleExperience
+```

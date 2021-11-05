@@ -4,7 +4,7 @@ using TheLastStand.Controller.Unit;
 
 namespace UnlimitedReroll
 {
-    [BepInPlugin("cn.shabywu.the_last_stand.unlimited_reroll", "Unlimited Reroll", "0.0.1")]
+    [BepInPlugin("cn.shabywu.the_last_stand.unlimited_reroll", "无限重投", "1.0.0")]
     public class Plugin : BaseUnityPlugin
     {
         private void Awake()

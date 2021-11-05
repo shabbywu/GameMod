@@ -18,6 +18,7 @@ jobs:
     - name: Build
       run: |
         dotnet build UnlimitedReroll -o bin --configuration Release
+        dotnet build MultipleGain -o bin --configuration Release
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
@@ -27,3 +28,4 @@ jobs:
         files: |
           Release.txt
           bin/UnlimitedReroll.dll
+          bin/MultipleGain.dll
