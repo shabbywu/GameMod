@@ -17,8 +17,8 @@ jobs:
         dotnet-version: '5.0.x'
     - name: Build
       run: |
-        dotnet build UnlimitedReroll -o bin --configuration Release
-        dotnet build MultipleGain -o bin --configuration Release
+        dotnet build TheLastSpellMod/UnlimitedReroll -o bin/TheLastSpellMod --configuration Release
+        dotnet build TheLastSpellMod/MultipleGain -o bin/TheLastSpellMod --configuration Release
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
@@ -27,5 +27,5 @@ jobs:
       with:
         files: |
           Release.txt
-          bin/UnlimitedReroll.dll
-          bin/MultipleGain.dll
+          bin/TheLastSpellMod/UnlimitedReroll.dll
+          bin/TheLastSpellMod/MultipleGain.dll
