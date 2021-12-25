@@ -19,6 +19,7 @@ jobs:
       run: |
         dotnet build TheLastSpellMod/UnlimitedReroll -o bin/TheLastSpellMod --configuration Release
         dotnet build TheLastSpellMod/MultipleGain -o bin/TheLastSpellMod --configuration Release
+        dotnet build michangsheng/DropEveryThing -o bin/michangsheng --configuration Release
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
@@ -29,3 +30,4 @@ jobs:
           Release.txt
           bin/TheLastSpellMod/UnlimitedReroll.dll
           bin/TheLastSpellMod/MultipleGain.dll
+          bin/michangsheng/
