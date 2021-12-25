@@ -26,5 +26,5 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 ## FAQ
 1. 如何开发新的 Mod
 ```bash
-dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
+dotnet new bepinex5plugin -T net46 -U 2018.4.36 -n {Your-Mod-Name}
 ```
