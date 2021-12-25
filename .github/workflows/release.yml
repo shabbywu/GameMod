@@ -20,6 +20,7 @@ jobs:
         dotnet build TheLastSpellMod/UnlimitedReroll -o bin/TheLastSpellMod --configuration Release
         dotnet build TheLastSpellMod/MultipleGain -o bin/TheLastSpellMod --configuration Release
         dotnet build michangsheng/BattleGains -o bin/michangsheng --configuration Release
+        dotnet build michangsheng/WuDaoGains -o bin/michangsheng --configuration Release
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
@@ -31,3 +32,4 @@ jobs:
           bin/TheLastSpellMod/UnlimitedReroll.dll
           bin/TheLastSpellMod/MultipleGain.dll
           bin/michangsheng/BattleGains.dll
+          bin/michangsheng/WuDaoGains.dll

@@ -53,14 +53,14 @@ namespace BattleGains
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool dropEquip(ref NpcDrop __instance, ref JSONObject ___npcDate, ref JSONObject addItemList, int NPCID)
         {
-            Console.WriteLine("calling patched NpcDrop:dropEquip");
+            Console.WriteLine("calling patched NpcDrop:dropEquip  " + NPCID);
             if (NPCID >= 20000) {
                 JSONObject jsonobject = ___npcDate[NPCID.ToString()]["equipList"];
                 foreach(string key in jsonobject.keys) {
                     if (jsonobject[key].HasField("NomalID")) {
                         buildTempItem(ref addItemList, jsonobject[key]["NomalID"].I, 1 * EquipmentDropMultiplier.Value, null);
                     } else {
-                        buildTempItem(ref addItemList, jsonobject[key]["NomalID"].I, 1 * EquipmentDropMultiplier.Value, jsonobject[key]);
+                        buildTempItem(ref addItemList, jsonobject[key]["ItemID"].I, 1 * EquipmentDropMultiplier.Value, jsonobject[key]);
                     }
                 }
             } else {
