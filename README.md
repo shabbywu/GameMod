@@ -19,9 +19,9 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 本项目所有 Mod 均基于 BepInEx 框架开发. [如何安装 BepInEx 框架](https://docs.bepinex.dev/master/articles/user_guide/installation/index.html)
 
 ## Mod 介绍
-### DropEveryThing(物品全掉落)
+### BattleGains(提高战斗收益)
 
-战斗胜利后, 物品全掉落。
+调整战斗胜利后的收益, 例如物品掉落倍率, 金钱掉落倍率, 装备掉落倍率。
 
 ## FAQ
 1. 如何开发新的 Mod
