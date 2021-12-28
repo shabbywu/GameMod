@@ -21,6 +21,7 @@ jobs:
         dotnet build TheLastSpellMod/MultipleGain -o bin/TheLastSpellMod --configuration Release
         dotnet build michangsheng/BattleGains -o bin/michangsheng --configuration Release
         dotnet build michangsheng/WuDaoGains -o bin/michangsheng --configuration Release
+        dotnet build michangsheng/BetterShoppingExperience -o bin/michangsheng --configuration Release
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
