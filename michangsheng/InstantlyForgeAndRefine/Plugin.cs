@@ -5,7 +5,7 @@ using System;
 
 namespace InstantlyForgeAndRefine
 {
-    [BepInPlugin("cn.shabywu.michangsheng.InstantlyForgeAndRefine", "瞬间炼丹", "0.1.0")]
+    [BepInPlugin("cn.shabywu.michangsheng.InstantlyForgeAndRefine", "瞬间炼器和炼丹", "0.1.0")]
     public class Plugin : BaseUnityPlugin
     {
         private void Awake()
@@ -35,6 +35,7 @@ namespace InstantlyForgeAndRefine
 
         static Harmony singleton;
 
+        [HarmonyPrefix]
         static void Prefix()
         {
             Console.WriteLine("before lianDanJieSuan");
@@ -46,12 +47,13 @@ namespace InstantlyForgeAndRefine
             }
         }
 
+        [HarmonyPostfix]
         static void Postfix()
         {
-            if (singleton == null) {
+            if (singleton != null) {
                 lock (_object) {
                     if (singleton != null) {
-                        singleton.UnpatchAll();
+                        singleton.UnpatchSelf();
                         singleton = null;
                         Console.WriteLine("unpatch Avatar::AddTime");
                     }

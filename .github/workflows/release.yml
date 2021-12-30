@@ -38,3 +38,4 @@ jobs:
           bin/michangsheng/WuDaoGains.dll
           bin/michangsheng/ShoterLearnTime.dll
           bin/michangsheng/BetterShoppingExperience.dll
+          bin/michangsheng/InstantlyForgeAndRefine.dll
