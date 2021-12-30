@@ -7,7 +7,7 @@ using Fight;
 
 namespace BattleGains
 {
-    [BepInPlugin("cn.shabywu.michangsheng.battle_gains", "战斗收益调整", "1.0.0")]
+    [BepInPlugin("cn.shabywu.michangsheng.BattleGains", "战斗收益调整", "1.0.0")]
     public class Plugin : BaseUnityPlugin
     {
 

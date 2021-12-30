@@ -5,7 +5,7 @@ using HarmonyLib;
 
 namespace WuDaoGains
 {
-    [BepInPlugin("cn.shabywu.michangsheng.wu_dao_gains", "悟道收益调整", "0.1.0")]
+    [BepInPlugin("cn.shabywu.michangsheng.WuDaoGains", "悟道收益调整", "0.1.0")]
     public class Plugin : BaseUnityPlugin
     {
         static ConfigEntry<int> WuDaoZhiMultipiler;
