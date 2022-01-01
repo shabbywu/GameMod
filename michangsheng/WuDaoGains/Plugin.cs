@@ -2,6 +2,7 @@
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using KBEngine;
 
 namespace WuDaoGains
 {
@@ -9,6 +10,7 @@ namespace WuDaoGains
     public class Plugin : BaseUnityPlugin
     {
         static ConfigEntry<int> WuDaoZhiMultipiler;
+        static ConfigEntry<int> LingGuangStudyTimeShorterMultipiler;
 
         private void Awake()
         {
@@ -16,17 +18,26 @@ namespace WuDaoGains
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
             WuDaoZhiMultipiler = Config.Bind("WuDaoGains",  "WuDaoZhiMultipiler", 10, "悟道值提升倍率");
-
+            LingGuangStudyTimeShorterMultipiler = Config.Bind("WuDaoGains",  "LingGuangStudyTimeShorterMultipiler", 20, "灵感学习时间降低倍率");
             Harmony.CreateAndPatchAll(typeof(Plugin));
         }
 
 
-        // 提升悟道值获取
-        [HarmonyPatch(typeof(LunDaoSuccess), "GetWuDaoZhi")] // Specify target method with HarmonyPatch attribute
+        // 降低悟道灵感的学习时间
+        [HarmonyPatch(typeof(WuDaoMag), "CalcGanWuTime")] // Specify target method with HarmonyPatch attribute
         [HarmonyPostfix]                              // There are different patch types. Prefix code runs before original code
-        static void patchGetWuDaoZhi(ref int __result){
-            __result *= WuDaoZhiMultipiler.Value;
-            Console.WriteLine("calling patched LunDaoSuccess::GetWuDaoZhi， result: " + __result);
+        static void patchCalcGanWuTime(ref int __result){
+            Console.WriteLine("calling patched WuDaoMag::CalcGanWuTime");
+            __result /= LingGuangStudyTimeShorterMultipiler.Value;
+        }
+
+        // 提升 悟道值
+        [HarmonyPatch(typeof(LunDaoManager), "AddWuDaoZhi")] // Specify target method with HarmonyPatch attribute
+        [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
+        static bool patchAddWuDaoZhi(ref LunDaoManager __instance, ref int addNum){
+            Console.WriteLine("calling patched LunDaoManager::AddWuDaoZhi");
+            addNum *= WuDaoZhiMultipiler.Value;
+            return true;
         }
     }
 }
