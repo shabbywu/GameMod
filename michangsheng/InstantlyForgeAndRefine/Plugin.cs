@@ -48,7 +48,7 @@ namespace InstantlyForgeAndRefine
 
         static void Postfix()
         {
-            if (singleton == null) {
+            if (singleton != null) {
                 lock (_object) {
                     if (singleton != null) {
                         singleton.UnpatchAll();
