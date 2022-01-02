@@ -51,7 +51,7 @@ namespace InstantlyForgeAndRefine
             if (singleton != null) {
                 lock (_object) {
                     if (singleton != null) {
-                        singleton.UnpatchAll();
+                        singleton.UnpatchSelf();
                         singleton = null;
                         Console.WriteLine("unpatch Avatar::AddTime");
                     }
