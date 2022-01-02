@@ -64,17 +64,18 @@ namespace BetterShoppingExperience
 
                     __instance.MonstarID = next;
                     __instance.initPlan();
+                    __instance.updateMoney();
                 }
                 return false;
             }
             // 上一页
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
-                __instance.selectPageMonstar.lastPage();
+                __instance.inventoryMonstar.selectpage.lastPage();
             }
     
             // 上一页
             if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
-                __instance.selectPageMonstar.nextPage();
+                __instance.inventoryMonstar.selectpage.nextPage();
             }
 
             return true;
