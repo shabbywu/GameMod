@@ -4,6 +4,7 @@ using BepInEx;
 using HarmonyLib;
 
 using GUIPackage;
+using JiaoYi;
 using UnityEngine;
 
 
@@ -21,12 +22,15 @@ namespace BetterShoppingExperience
             Harmony.CreateAndPatchAll(typeof(Plugin));
         }
 
-        // 修改监听事件
-        [HarmonyPatch(typeof(ExchangePlan), "Update")] // Specify target method with HarmonyPatch attribute
-        [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
-        static bool patchExchangePlanUpdate(ref ExchangePlan __instance){
-            int currentId = __instance.MonstarID;
-            // 切换交易对象
+        private void Update() {
+            if (JiaoYiUIMag.Inst == null) {
+                return;
+            }
+            JiaoYiUIMag __instance = JiaoYiUIMag.Inst;
+
+            int currentId = __instance.NpcId;
+
+            // 尝试切换交易对象
             if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)) {
                 if (UINPCJiaoHu.Inst != null) {
                     List<int> o = new List<int>();
@@ -62,23 +66,9 @@ namespace BetterShoppingExperience
                     int next = findNext(o, currentId);;
                     Console.WriteLine("Current" + currentId + ", next id = " + next);
 
-                    __instance.MonstarID = next;
-                    __instance.initPlan();
-                    __instance.updateMoney();
+                    __instance.Init(next);
                 }
-                return false;
             }
-            // 上一页
-            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
-                __instance.inventoryMonstar.selectpage.lastPage();
-            }
-    
-            // 上一页
-            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
-                __instance.inventoryMonstar.selectpage.nextPage();
-            }
-
-            return true;
         }
 
         static int findNext(List<int> list, int target) {
