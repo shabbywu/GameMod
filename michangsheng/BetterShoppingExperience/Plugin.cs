@@ -26,7 +26,8 @@ namespace BetterShoppingExperience
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool patchExchangePlanUpdate(ref ExchangePlan __instance){
             int currentId = __instance.MonstarID;
-            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)) {
+            // 切换交易对象
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)) {
                 if (UINPCJiaoHu.Inst != null) {
                     List<int> o = new List<int>();
 
@@ -54,7 +55,7 @@ namespace BetterShoppingExperience
                         o.Add(id);
                     }
 
-                    if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                    if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) ) {
                         o.Reverse();
                     }
 
@@ -63,9 +64,20 @@ namespace BetterShoppingExperience
 
                     __instance.MonstarID = next;
                     __instance.initPlan();
+                    __instance.updateMoney();
                 }
                 return false;
             }
+            // 上一页
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) {
+                __instance.inventoryMonstar.selectpage.lastPage();
+            }
+    
+            // 上一页
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) {
+                __instance.inventoryMonstar.selectpage.nextPage();
+            }
+
             return true;
         }
 
