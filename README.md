@@ -23,6 +23,26 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 
 调整战斗胜利后的收益, 例如物品掉落倍率, 金钱掉落倍率, 装备掉落倍率。
 
+### BetterShoppingExperience(更好的商店体验)
+
+支持使用 W/S/上/下 切换交易对象
+
+### CollectGains(提高采集收益)
+
+调整采集的时间耗时, 1个月的时间调整成1日, 1年的时间调整成1个月
+
+### InstantlyForgeAndRefine(瞬间炼丹、炼器）
+
+调整炼丹、炼器的耗时为0
+
+### ShoterLearnTime(缩短学习时间)
+
+调整学习、突破功法的耗时，可在配置中调整倍率
+
+### WuDaoGains(悟道收益调整)
+
+调整悟道的收益, 悟道点的获取倍率、降低感悟灵感的时间消耗、提高灵感提供的经验值
+
 ## FAQ
 1. 如何开发新的 Mod
 ```bash
