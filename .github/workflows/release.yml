@@ -40,3 +40,4 @@ jobs:
           bin/michangsheng/ShoterLearnTime.dll
           bin/michangsheng/BetterShoppingExperience.dll
           bin/michangsheng/InstantlyForgeAndRefine.dll
+          bin/michangsheng/CollectGains.dll
