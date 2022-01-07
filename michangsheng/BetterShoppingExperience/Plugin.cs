@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BepInEx;
 using HarmonyLib;
 
-using GUIPackage;
+using UnityEngine.Events;
 using JiaoYi;
 using UnityEngine;
 
@@ -13,6 +13,8 @@ namespace BetterShoppingExperience
     [BepInPlugin("cn.shabywu.michangsheng.BetterShoppingExperience", "更好的交易体验", "0.1.0")]
     public class Plugin : BaseUnityPlugin
     {
+
+        static UnityAction closeAction;
 
         private void Awake()
         {
@@ -66,7 +68,14 @@ namespace BetterShoppingExperience
                     int next = findNext(o, currentId);;
                     Console.WriteLine("Current" + currentId + ", next id = " + next);
 
-                    __instance.Init(next);
+                    // stop closeAction
+                    closeAction = __instance.CloseAction;
+
+                    __instance.CloseAction = delegate() {};
+                    __instance.Close();
+                    
+                    ResManager.inst.LoadPrefab("JiaoYiUI").Inst(NewUICanvas.Inst.transform);
+                    JiaoYiUIMag.Inst.Init(next, closeAction);
                 }
             }
         }

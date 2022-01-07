@@ -14,12 +14,12 @@ namespace CollectGains
             // Plugin startup logic
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
-            Harmony.CreateAndPatchAll(typeof(Plugin));
+            Harmony.CreateAndPatchAll(typeof(CollectGains));
         }
     }
 
     [HarmonyPatch(typeof(CaiJiUIMag), "StartCaiJi")]
-    public class InstantlyRefine {
+    public class CollectGains {
         static readonly object _object = new object(); 
 
         static Harmony singleton;
