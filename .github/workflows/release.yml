@@ -25,6 +25,7 @@ jobs:
         dotnet build michangsheng/BetterShoppingExperience -o bin/michangsheng --configuration Release
         dotnet build michangsheng/InstantlyForgeAndRefine -o bin/michangsheng --configuration Release
         dotnet build michangsheng/CollectGains -o bin/michangsheng --configuration Release
+        dotnet build michangsheng/ForgetWuDaoSkill -o bin/michangsheng --configuration Release
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
@@ -41,3 +42,4 @@ jobs:
           bin/michangsheng/BetterShoppingExperience.dll
           bin/michangsheng/InstantlyForgeAndRefine.dll
           bin/michangsheng/CollectGains.dll
+          bin/michangsheng/ForgetWuDaoSkill.dll
