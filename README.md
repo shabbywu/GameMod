@@ -43,6 +43,10 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 
 调整悟道的收益, 悟道点的获取倍率、降低感悟灵感的时间消耗、提高灵感提供的经验值
 
+### ForgetWuDaoSkill(遗忘悟道技能)
+
+可在学习悟道技能的界面中直接遗忘悟道技能。
+
 ## FAQ
 1. 如何开发新的 Mod
 ```bash

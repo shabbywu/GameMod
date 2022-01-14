@@ -14,6 +14,9 @@ namespace WuDaoGains
         static ConfigEntry<int> LingGuangStudyGainMultipiler;
         static ConfigEntry<int> LingGuangStudyTimeShorterMultipiler;
 
+        public delegate void Log(object data);
+        public static Log LogDebug;
+
         private void Awake()
         {
             // Plugin startup logic
@@ -24,6 +27,8 @@ namespace WuDaoGains
             LingGuangStudyGainMultipiler = Config.Bind("WuDaoGains",  "LingGuangStudyGainMultipiler", 4, "灵光学习收益, 会延长学习时间");
             LingGuangStudyTimeShorterMultipiler = Config.Bind("WuDaoGains",  "LingGuangStudyTimeShorterMultipiler", 20, "感悟灵光所需时间的降低倍率");
             Harmony.CreateAndPatchAll(typeof(Plugin));
+
+            LogDebug = Logger.LogDebug;
         }
 
 
@@ -31,7 +36,7 @@ namespace WuDaoGains
         [HarmonyPatch(typeof(WuDaoMag), "CalcGanWuTime")] // Specify target method with HarmonyPatch attribute
         [HarmonyPostfix]                              // There are different patch types. Prefix code runs before original code
         static void patchCalcGanWuTime(ref int __result){
-            Console.WriteLine("calling patched WuDaoMag::CalcGanWuTime");
+            LogDebug("calling patched WuDaoMag::CalcGanWuTime");
             __result /= LingGuangStudyTimeShorterMultipiler.Value;
         }
 
@@ -39,7 +44,7 @@ namespace WuDaoGains
         [HarmonyPatch(typeof(WuDaoMag), "AddLingGuang")] // Specify target method with HarmonyPatch attribute
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool patchAddLingGuang(ref int studyTime){
-            Console.WriteLine("calling patched WuDaoMag::AddLingGuang");
+            LogDebug("calling patched WuDaoMag::AddLingGuang");
             studyTime *= LingGuangStudyGainMultipiler.Value;
             return true;
         }
@@ -48,7 +53,7 @@ namespace WuDaoGains
         [HarmonyPatch(typeof(LunDaoManager), "AddWuDaoZhi")] // Specify target method with HarmonyPatch attribute
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool patchAddWuDaoZhi(ref LunDaoManager __instance, ref int addNum){
-            Console.WriteLine("calling patched LunDaoManager::AddWuDaoZhi");
+            LogDebug("calling patched LunDaoManager::AddWuDaoZhi");
             addNum *= WuDaoZhiMultipiler.Value;
             return true;
         }

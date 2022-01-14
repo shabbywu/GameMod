@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using HarmonyLib;
 using System.Collections.Generic;
-using System;
 
 
 namespace ForgetWuDaoSkill
@@ -12,6 +11,9 @@ namespace ForgetWuDaoSkill
     public class Plugin : BaseUnityPlugin
     {
 
+        public delegate void Log(object data);
+        public static Log LogDebug;
+
         private void Awake()
         {
             // Plugin startup logic
@@ -19,6 +21,8 @@ namespace ForgetWuDaoSkill
 
             Harmony.CreateAndPatchAll(typeof(PatchWuDaoTooltipShow));
             Harmony.CreateAndPatchAll(typeof(Plugin));
+
+            LogDebug = Logger.LogDebug;
         }
 
         [HarmonyPatch(typeof(Tab.WuDaoTooltip), "Show")]
@@ -28,7 +32,7 @@ namespace ForgetWuDaoSkill
 
             static void Prefix(ref int wudaoId)
             {
-                Console.WriteLine("before WuDaoTooltip::Show");
+                LogDebug("before WuDaoTooltip::Show");
                 if (wudaoId > 0) {
                     flags[wudaoId] = false;
                     return;
@@ -42,7 +46,7 @@ namespace ForgetWuDaoSkill
 
             static void Postfix(ref int wudaoId, ref Text ____cost, ref FpBtn ____btn)
             {
-                Console.WriteLine("after WuDaoTooltip::Show");
+                LogDebug("after WuDaoTooltip::Show");
                 if (flags[wudaoId]) {
                     ____cost.text = ____cost.text.Replace("【需求点数】", "【返还点数】");
                     ____btn.GetComponentInChildren<Text>().text = "遗忘";
@@ -66,7 +70,7 @@ namespace ForgetWuDaoSkill
                     ____go.GetComponent<Tab.TabListener>().mouseUpEvent.AddListener(delegate()
                     {
                         WuDaoTooltip.Show(icon.sprite, -instance.Id, delegate(){
-                            Console.WriteLine("calling Forget");
+                            LogDebug("calling Forget");
                             Forget(instance);
                         });
 
@@ -77,7 +81,7 @@ namespace ForgetWuDaoSkill
                     ____go.GetComponent<Tab.TabListener>().mouseUpEvent.AddListener(delegate()
                     {
                         WuDaoTooltip.Show(icon.sprite, instance.Id, delegate(){
-                            Console.WriteLine("calling Study");
+                            LogDebug("calling Study");
                             Study(instance);
                         });
                     });
