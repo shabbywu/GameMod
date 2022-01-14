@@ -15,6 +15,8 @@ namespace BetterShoppingExperience
     {
 
         static UnityAction closeAction;
+        public delegate void Log(object data);
+        public static Log LogDebug;
 
         private void Awake()
         {
@@ -22,6 +24,8 @@ namespace BetterShoppingExperience
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
             Harmony.CreateAndPatchAll(typeof(Plugin));
+
+            LogDebug = Logger.LogDebug;
         }
 
         private void Update() {
@@ -66,7 +70,7 @@ namespace BetterShoppingExperience
                     }
 
                     int next = findNext(o, currentId);;
-                    Console.WriteLine("Current" + currentId + ", next id = " + next);
+                    LogDebug("Current" + currentId + ", next id = " + next);
 
                     // stop closeAction
                     closeAction = __instance.CloseAction;
@@ -86,7 +90,7 @@ namespace BetterShoppingExperience
                 index = list.FindIndex(delegate(int i){
                     return i == target;
                 });
-            } catch (ArgumentNullException) {
+            } catch (Exception) {
                 return -1;
             }
 

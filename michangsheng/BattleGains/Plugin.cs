@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -10,6 +9,9 @@ namespace BattleGains
     [BepInPlugin("cn.shabywu.michangsheng.BattleGains", "战斗收益调整", "1.0.0")]
     public class Plugin : BaseUnityPlugin
     {
+
+        public delegate void Log(object data);
+        public static Log LogDebug;
 
         static ConfigEntry<int> EquipmentDropMultiplier;
         static ConfigEntry<int> ItemDropMultiplier;
@@ -26,13 +28,15 @@ namespace BattleGains
 
             MoneyDropMultipiler = Config.Bind("BattleGains",  "MoneyDropMultipiler", 5f, "金钱掉落倍率");
             Harmony.CreateAndPatchAll(typeof(Plugin));
+
+            LogDebug = Logger.LogDebug;
         }
 
         // 掉落金钱
         [HarmonyPatch(typeof(FightVictory), "addMoney")] // Specify target method with HarmonyPatch attribute
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool patchAddMoney(ref NpcDrop __instance, ref float percent){
-            Console.WriteLine("calling patched FightVictory::addMoney");
+            LogDebug("calling patched FightVictory::addMoney");
             percent = MoneyDropMultipiler.Value;
             return true;
         }
@@ -42,7 +46,7 @@ namespace BattleGains
         [HarmonyPatch(typeof(NpcDrop), "dropReward")] // Specify target method with HarmonyPatch attribute
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool dropReward(ref NpcDrop __instance, ref float equipLv, ref float packLv, int NPCID){
-            Console.WriteLine("calling patched NpcDrop:dropReward");
+            LogDebug("calling patched NpcDrop:dropReward");
             equipLv = 1;
             packLv = 1;
             return true;
@@ -53,7 +57,7 @@ namespace BattleGains
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool dropEquip(ref NpcDrop __instance, ref JSONObject ___npcDate, ref JSONObject addItemList, int NPCID)
         {
-            Console.WriteLine("calling patched NpcDrop:dropEquip  " + NPCID);
+            LogDebug("calling patched NpcDrop:dropEquip  " + NPCID);
             if (NPCID >= 20000) {
                 JSONObject jsonobject = ___npcDate[NPCID.ToString()]["equipList"];
                 foreach(string key in jsonobject.keys) {

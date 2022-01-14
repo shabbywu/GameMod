@@ -13,6 +13,9 @@ namespace ShoterLearnTime
 
         static ConfigEntry<int> ShorterTuPoMultipiler;
 
+        public delegate void Log(object data);
+        public static Log LogDebug;
+
         private void Awake()
         {
             // Plugin startup logic
@@ -21,6 +24,8 @@ namespace ShoterLearnTime
             ShorterStudyMultipiler = Config.Bind("ShoterLearnTime",  "ShorterStudyMultipiler", 10, "缩短学习时间倍率");
             ShorterTuPoMultipiler = Config.Bind("ShoterLearnTime",  "ShorterTuPoMultipiler", 3, "缩短突破时间倍率");
             Harmony.CreateAndPatchAll(typeof(Plugin));
+
+            LogDebug = Logger.LogDebug;
         }
 
         // 降低功法突破时间
@@ -28,7 +33,7 @@ namespace ShoterLearnTime
         [HarmonyPostfix]                              // There are different patch types. Prefix code runs before original code
         static void patchGetStudiStaticSkillTime(ref int __result){
             __result /= ShorterTuPoMultipiler.Value;
-            Console.WriteLine("calling patched Tools::getStudiStaticSkillTime result: " + __result);
+            LogDebug("calling patched Tools::getStudiStaticSkillTime result: " + __result);
         }
 
         // 降低功法学习时间
@@ -36,7 +41,7 @@ namespace ShoterLearnTime
         [HarmonyPostfix]                              // There are different patch types. Prefix code runs before original code
         static void patchGetStudiSkillTime(ref int __result){
             __result /= ShorterStudyMultipiler.Value;
-            Console.WriteLine("calling patched Tools::getStudiSkillTime result: " + __result);
+            LogDebug("calling patched Tools::getStudiSkillTime result: " + __result);
         }
     }
 }
