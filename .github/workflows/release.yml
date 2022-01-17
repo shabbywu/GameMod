@@ -26,6 +26,7 @@ jobs:
         dotnet build michangsheng/InstantlyForgeAndRefine -o bin/michangsheng --configuration Release
         dotnet build michangsheng/CollectGains -o bin/michangsheng --configuration Release
         dotnet build michangsheng/ForgetWuDaoSkill -o bin/michangsheng --configuration Release
+        dotnet build michangsheng/FriendlyLianDan -o bin/michangsheng --configuration Release
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
