@@ -16,6 +16,10 @@ namespace FriendlyLianDan
             itemDatabase = (ItemDataBaseList)Resources.Load("ItemDatabase");
             _hi = Harmony.CreateAndPatchAll(typeof(PatchDanFangParentCellInit));
             LogDebug = Logger.LogDebug;
+
+            foreach (var item in ItemSystem.Items.Instance.items) {
+                LogDebug(item.ToString());
+            }
         }
 
         private static Harmony _hi;
