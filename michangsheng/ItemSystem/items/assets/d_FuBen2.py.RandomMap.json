@@ -1,0 +1,50 @@
+{
+	"1": {
+		"id": 1,
+		"EventName": "\u65e0\u4e8b\u53d1\u751f",
+		"EventType": 0,
+		"EventList": 0,
+		"EventData": 7005,
+		"MosterID": 0,
+		"EventCastTime": 1,
+		"EventLv": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+		"percent": 40,
+		"once": 0
+	},
+	"2": {
+		"id": 2,
+		"EventName": "\u906d\u9047\u4e0b\u7b49\u9b54",
+		"EventType": 0,
+		"EventList": 0,
+		"EventData": 7006,
+		"MosterID": 0,
+		"EventCastTime": 1,
+		"EventLv": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+		"percent": 15,
+		"once": 0
+	},
+	"3": {
+		"id": 3,
+		"EventName": "\u9690\u853d\u6d1e\u7a9f",
+		"EventType": 0,
+		"EventList": 1,
+		"EventData": 1,
+		"MosterID": 0,
+		"EventCastTime": 1,
+		"EventLv": [14, 15],
+		"percent": 5,
+		"once": 0
+	},
+	"4": {
+		"id": 4,
+		"EventName": "\u53d1\u73b0\u4e0b\u7b49\u9b54",
+		"EventType": 0,
+		"EventList": 0,
+		"EventData": 7010,
+		"MosterID": 0,
+		"EventCastTime": 1,
+		"EventLv": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+		"percent": 15,
+		"once": 0
+	}
+}
