@@ -1,0 +1,1 @@
+{"1": {"id": 1, "Type": [], "YingXiang": [], "GaiLv": []}, "2": {"id": 2, "Type": [], "YingXiang": [], "GaiLv": []}, "3": {"id": 3, "Type": [2], "YingXiang": [2], "GaiLv": [30]}, "4": {"id": 4, "Type": [2, 3], "YingXiang": [1, 2], "GaiLv": [20, 40]}}
