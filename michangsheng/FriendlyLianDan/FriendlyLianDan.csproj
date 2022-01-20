@@ -20,8 +20,11 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>../lib/Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>../lib/Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
