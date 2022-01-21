@@ -37,7 +37,7 @@ namespace FriendlyLianDan
                         {
                             foreach (Combination intro in Tables.listPossibleIntro(target.intro, fuzzy: fuzzy, maxNum: maxNum - main1.num - main2.num - deputy1.num - deputy2.num))
                             {
-                                if (ValidateNeutralize(intro.herbs, main1.herbs, main2.herbs, deputy1.herbs, deputy2.herbs))
+                                if (ValidateNeutralize(intro.herbs.intro, main1.herbs, main2.herbs, deputy1.herbs, deputy2.herbs))
                                 {
                                     var danfang = new ItemSystem.Loaders.DanFang();
                                     danfang.name = target.name;
@@ -76,7 +76,7 @@ namespace FriendlyLianDan
             }
         }
 
-        public static bool ValidateNeutralize(params Herbs[] args)
+        public static bool ValidateNeutralize(YaoXing intro, params Herbs[] args)
         {
             int flag = 0;
             foreach (Herbs herbs in args)
@@ -93,7 +93,7 @@ namespace FriendlyLianDan
                     }
                 }
             }
-            return flag == 0;
+            return (flag > 0 && intro.kind == 1) || (flag < 0 && intro.kind == 2) || (flag == 0 && intro.kind == 3);
         }
     }
 }

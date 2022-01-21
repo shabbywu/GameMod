@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field, BaseConfig
 from typing import Tuple, Optional
 from items.loaders.items import items
 from items.loaders.danfang import danfangs
+from items.loaders.yaozhi import yaozhis
 from items.constants import WuPingType
 
 
@@ -21,7 +22,7 @@ class BaseItem:
         return f"{self.base.quality}品{self.type.name}<{self.base.name}>"
 
     def __repr__(self):
-        return f"DanYao(item_id={self.base.id})"
+        return f"{self.__class__.__name__}(item_id={self.base.id})"
 
 
 class DanYao(BaseItem):
@@ -116,6 +117,10 @@ class YaoXing(BaseModel):
         if isinstance(other, int):
             return YaoXing(kind=self.kind, intensity=self.intensity * other)
         raise NotImplementedError
+
+    def __str__(self):
+        yaozhi = yaozhis.get_by_item_id(self.kind)
+        return f"药性: {yaozhi.name}, 强度: {self.intensity}"
 
 
 _quality_factor = {1: 1, 2: 3, 3: 9, 4: 36, 5: 180, 6: 1080}
