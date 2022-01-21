@@ -57,11 +57,11 @@ class Emulator:
                             fuzzy=fuzzy,
                         ):
                             if self.check_neutralize(
+                                inteo_herb,
                                 main1_herb,
                                 main2_herb,
                                 deputy1_herb,
                                 deputy2_herb,
-                                inteo_herb,
                             ):
                                 yield DangFang(
                                     id=0,
@@ -80,7 +80,7 @@ class Emulator:
                                     num5=deputy2_num,
                                 )
 
-    def check_neutralize(self, *args: Herbs) -> bool:
+    def check_neutralize(self, intro: Herbs, *args: Herbs) -> bool:
         """检测草药是否能中和"""
         flag = 0
         for herb in args:
@@ -89,7 +89,8 @@ class Emulator:
                     flag -= 1
                 elif herb.intro.kind == 2:
                     flag += 1
-        return flag == 0
+
+        return (flag > 0 and intro.intro.kind == 1) or (flag < 0 and intro.intro.kind == 2) or (flag == 0 and intro.intro.kind == 3)
 
     def __iter__(self):
         return self.generator()

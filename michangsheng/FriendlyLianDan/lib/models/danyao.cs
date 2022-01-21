@@ -49,9 +49,9 @@ namespace ItemSystem.Models
                 input2 = null;
             }
 
-            if (input1 != null && input1 != null)
+            if (input1 != null && input2 != null)
             {
-                if (input1.kind > input1.kind)
+                if (input1.kind > input2.kind)
                 {
                     var tmp = input1;
                     input1 = input2;
