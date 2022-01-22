@@ -26,26 +26,26 @@ namespace ItemSystem.Loaders
         public override string ToString () {
             StringBuilder sb = new StringBuilder($"丹方<{ItemID} {name}>{{\n", 64);
             if (value1 != 0) {
-                sb.AppendFormat("\t药引id: {0}, 用量: {1}\n", Items.getByItemID(value1).ToString(), num1);
+                sb.AppendFormat("\t药引id: {0}, 用量: {1}\n", Items.GetByItemID(value1).ToString(), num1);
             }
             if (value2 != 0) {
-                sb.AppendFormat("\t主药1: {0}, 用量: {1}\n", Items.getByItemID(value2).ToString(), num2);
+                sb.AppendFormat("\t主药1: {0}, 用量: {1}\n", Items.GetByItemID(value2).ToString(), num2);
             }
             if (value3 != 0) {
-                sb.AppendFormat("\t主药1: {0}, 用量: {1}\n", Items.getByItemID(value3).ToString(), num3);
+                sb.AppendFormat("\t主药1: {0}, 用量: {1}\n", Items.GetByItemID(value3).ToString(), num3);
             }
             if (value4 != 0) {
-                sb.AppendFormat("\t副药1: {0}, 用量: {1}\n", Items.getByItemID(value4).ToString(), num4);
+                sb.AppendFormat("\t副药1: {0}, 用量: {1}\n", Items.GetByItemID(value4).ToString(), num4);
             }
             if (value5 != 0) {
-                sb.AppendFormat("\t副药2: {0}, 用量: {1}\n", Items.getByItemID(value5).ToString(), num5);
+                sb.AppendFormat("\t副药2: {0}, 用量: {1}\n", Items.GetByItemID(value5).ToString(), num5);
             }
             sb.Append("}");
             return sb.ToString();
         }
 
         // 转换为游戏中 DanFang.list 中存储的 JSONObject 对象
-        public JSONObject toJSONObject () {
+        public JSONObject ToJSONObject () {
 			JSONObject jsonobject = new JSONObject(JSONObject.Type.OBJECT);
 			JSONObject values = new JSONObject(JSONObject.Type.ARRAY);
 			JSONObject nums = new JSONObject(JSONObject.Type.ARRAY);
@@ -72,7 +72,11 @@ namespace ItemSystem.Loaders
         private static string path = "Effect/json/d_LianDan.py.DanFangBiao";
         public IDictionary<int, DanFang> danfangs;
 
-        public static DanFang getByDanYaoID(int itemID)
+        public static IEnumerable<DanFang> List() {
+            return Instance.danfangs.Values;
+        }
+
+        public static DanFang GetByDanYaoID(int itemID)
         {
             return Instance.danfangs[itemID];
         }

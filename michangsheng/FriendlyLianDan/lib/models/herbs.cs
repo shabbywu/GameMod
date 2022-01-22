@@ -61,7 +61,7 @@ namespace ItemSystem.Models
             {
                 return null;
             }
-            ItemSystem.Loaders.Item herb = ItemSystem.Loaders.Items.getByItemID(itemID);
+            ItemSystem.Loaders.Item herb = ItemSystem.Loaders.Items.GetByItemID(itemID);
 
             return new YaoXing(
                 kind: (int)herb.GetType().GetProperty($"yaoZhi{kind}").GetValue(herb),

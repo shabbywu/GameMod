@@ -12,7 +12,7 @@ namespace ItemSystem.Models
         public WuPingType type;
         public BaseModel(int itemID)
         {
-            _base = ItemSystem.Loaders.Items.getByItemID(itemID);
+            _base = ItemSystem.Loaders.Items.GetByItemID(itemID);
             id = _base.id;
             name = _base.name;
             quality = _base.quality;
