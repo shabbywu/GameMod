@@ -16,8 +16,7 @@ namespace FriendlyLianDan
             // Plugin startup logic
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
             itemDatabase = (ItemDataBaseList)Resources.Load("ItemDatabase");
-            Harmony.CreateAndPatchAll(typeof(PatchDanFangParentCellInit));
-            Harmony.CreateAndPatchAll(typeof(PatchDanYaoItemUse));
+            Harmony.CreateAndPatchAll(typeof(Plugin));
             LogDebug = Logger.LogDebug;
         }
         private static ItemDataBaseList itemDatabase;
@@ -26,61 +25,82 @@ namespace FriendlyLianDan
         public static Log LogDebug;
 
         [HarmonyPatch(typeof(DanFangParentCell), "init")]
-        public class PatchDanFangParentCellInit
+        [HarmonyPostfix]
+        static void PatchDanFangParentCellInit(ref DanFangParentCell __instance)
         {
-            static void Postfix(ref DanFangParentCell __instance)
+            // TODO: 重构成 UIIconShow
+            DanFangParentCell instance = __instance;
+            TabListener listener = __instance.gameObject.GetComponent<TabListener>();
+            if (listener == null)
             {
-                DanFangParentCell instance = __instance;
-                TabListener listener = __instance.gameObject.GetComponent<TabListener>();
-                if (listener == null)
+                listener = __instance.gameObject.AddComponent<TabListener>();
+            }
+            listener.mouseEnterEvent.AddListener(() =>
+            {
+                UToolTip.OpenItemTooltip(new GUIPackage.item(instance.DanFangID));
+            });
+            listener.mouseOutEvent.AddListener(() =>
+            {
+                UToolTip.Close();
+            });
+        }
+
+        [HarmonyPatch(typeof(DanFangParentCell), "clickDanFang")]
+        [HarmonyPrefix]
+        static void PatchDanFangParentCellClickDanFang(ref DanFangParentCell __instance, ref GameObject ___DanFangChildCell)
+        {
+            if (__instance.DanFangID == 0)
+            {
+                LogDebug("未知丹方, 忽略");
+            }
+            var item = Items.getByItemID(__instance.DanFangID);
+            LogDebug($"点击了 {item}");
+            var danyao = new DanYao(item.id);
+
+            foreach (var danfang in new Emulator(danyao, maxNum: 12).Generator())
+            {
+                var builtinDanFang = danfang.toJSONObject();
+                if (!hasSameDanFang(builtinDanFang))
                 {
-                    listener = __instance.gameObject.AddComponent<TabListener>();
+                    LogDebug($"尝试添加丹方 {danfang}");
+                    DanFangChildCell component = Tools.InstantiateGameObject(___DanFangChildCell, ___DanFangChildCell.transform.parent).GetComponent<DanFangChildCell>();
+                    __instance.childs.Add(builtinDanFang);
+                    component.danFang = __instance.childs[__instance.childs.Count - 1];
+                    component.init();
+                    __instance.childDanFangChildCellList.Add(component);
+                    __instance.childDanFangChildCellList[__instance.finallyIndex].showLine();
+                    __instance.finallyIndex++;
+                    __instance.childDanFangChildCellList[__instance.finallyIndex].hideLine();
+                    __instance.updateState();
                 }
-                listener.mouseEnterEvent.AddListener(() =>
+                else
                 {
-                    UToolTip.OpenItemTooltip(new GUIPackage.item(instance.DanFangID));
-                });
-                listener.mouseOutEvent.AddListener(() =>
-                {
-                    UToolTip.Close();
-                });
+                    LogDebug("当前丹方已存在, 跳过.");
+                }
             }
         }
 
-        [HarmonyPatch(typeof(Bag.DanYaoItem), "Use")]
-        public class PatchDanYaoItemUse
+        public static bool hasSameDanFang(JSONObject obj)
         {
-            static void Postfix(ref int ___Id)
+            foreach (var other in Tools.instance.getPlayer().DanFang.list)
             {
-                var item = Items.getByItemID(___Id);
-
-                if (item.type == ItemSystem.WuPingType.丹药)
+                if (other["ID"].I == obj["ID"].I)
                 {
-                    LogDebug($"使用了 {item}");
-                    var danyao = new DanYao(item.id);
-                    LogDebug($"模板丹方 {danyao.danfang}");
-                    foreach (var danfang in new Emulator(danyao, maxNum: 12).Generator())
+                    int num = 0;
+                    for (int j = 0; j < obj.Count; j++)
                     {
-                        LogDebug($"尝试添加丹方 {danfang}");
-                        Tools.instance.getPlayer().addDanFang(danfang.ItemID,
-                        new List<int> { danfang.value1, danfang.value2, danfang.value3, danfang.value4, danfang.value5 },
-                        new List<int> { danfang.num1, danfang.num2, danfang.num3, danfang.num4, danfang.num5 });
+                        if (other["Type"][j].I == obj["Type"][j].I && other["Num"][j].I == obj["Num"][j].I)
+                        {
+                            num++;
+                        }
+                    }
+                    if (num == 5)
+                    {
+                        return true;
                     }
                 }
             }
+            return false;
         }
-
-        // 推演所有丹方
-        public void CalculateAllDanFang(int danyaoID)
-        {
-            if (!jsonData.instance.LianDanDanFangBiao.HasField(danyaoID.ToString()))
-            {
-                LogDebug($"丹方出错丹方表ID {danyaoID} 不存在");
-                return;
-            }
-
-
-        }
-
     }
 }
