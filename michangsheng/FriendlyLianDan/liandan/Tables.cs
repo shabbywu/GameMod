@@ -127,7 +127,7 @@ namespace FriendlyLianDan
             main = new Dictionary<YaoXing, List<Combination>>();
             deputy = new Dictionary<YaoXing, List<Combination>>();
 
-            foreach (var item in ItemSystem.Loaders.Items.filterByType(WuPingType.草药))
+            foreach (var item in ItemSystem.Loaders.Items.FilterByType(WuPingType.草药))
             {
                 Herbs herbs = new Herbs(item.id);        
                 foreach (string field in fields)

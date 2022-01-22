@@ -51,12 +51,12 @@ namespace ItemSystem.Loaders
 
         public IDictionary<int, Item> items;
 
-        public static Item getByItemID(int itemID)
+        public static Item GetByItemID(int itemID)
         {
             return Instance.items[itemID];
         }
 
-        public static IEnumerable<Item> filterByType(WuPingType type)
+        public static IEnumerable<Item> FilterByType(WuPingType type)
         {
             foreach(var kv in Instance.items) {
                 if (kv.Value.type == type) {

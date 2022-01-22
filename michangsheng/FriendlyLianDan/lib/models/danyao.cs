@@ -21,7 +21,7 @@ namespace ItemSystem.Models
 
             try
             {
-                danfang = ItemSystem.Loaders.DanFangs.getByDanYaoID(itemID);
+                danfang = ItemSystem.Loaders.DanFangs.GetByDanYaoID(itemID);
                 intro = YaoXing.GetHerbsYaoXing(danfang.value1, danfang.num1, 1);
                 Validate(YaoXing.GetHerbsYaoXing(danfang.value2, danfang.num2, 2), YaoXing.GetHerbsYaoXing(danfang.value3, danfang.num3, 2), out main1, out main2);
                 Validate(YaoXing.GetHerbsYaoXing(danfang.value4, danfang.num4, 3), YaoXing.GetHerbsYaoXing(danfang.value5, danfang.num5, 3), out deputy1, out deputy2);
