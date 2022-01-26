@@ -58,9 +58,20 @@ namespace ItemSystem.Loaders
                 nums.Add(n);
             }
 
+            int cost = 0;
+            for(int i = 0; i < values.Count; i++) {
+                if (values[i].I != 0) {
+                    cost += Items.GetByItemID(values[i].I).price * nums[i].I;
+                }
+            }
+
 			jsonobject.AddField("ID", ItemID);
 			jsonobject.AddField("Type", values);
 			jsonobject.AddField("Num", nums);
+
+            // extra fields
+            jsonobject.AddField("__Cost", cost);
+
             return jsonobject;
         }
     }
