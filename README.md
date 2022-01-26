@@ -47,6 +47,14 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 
 可在学习悟道技能的界面中直接遗忘悟道技能。
 
+### FriendlyLianDan(更友好的炼丹体验)
+
+提供更舒适的炼丹体验.
+- 炼丹界面中展示 Hover 中的丹药的功效
+- 自动计算所有炼丹丹方
+- 仅展示可炼制的丹方
+- 丹方按药草的价值排序
+
 ## FAQ
 1. 如何开发新的 Mod
 ```bash
