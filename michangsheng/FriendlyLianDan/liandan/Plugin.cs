@@ -70,6 +70,17 @@ namespace FriendlyLianDan
             }
         }
 
+        [HarmonyPatch(typeof(GUIPackage.Inventory2), "Show_Tooltip")]
+        [HarmonyPostfix]
+        public static void PatchInventory2Show_Tooltip(GUIPackage.Inventory2 __instance, ref GUIPackage.item Item) {
+            TooltipItem component = __instance.Tooltip.GetComponent<TooltipItem>();
+
+            var itemNumText = string.Format("已有:{0}\n", Tools.instance.getPlayer().getItemNum(Item.itemID));
+            if (!component.Label2.text.StartsWith("已有")) {
+                component.Label2.text = itemNumText + component.Label2.text;
+            }
+        }
+
         public class PatchDanFangList
         {
             [HarmonyPatch(typeof(DanFangPageManager), "getNoSameDanFangList")]
