@@ -12,6 +12,8 @@ namespace FriendlyLianDan
     [BepInPlugin("cn.shabywu.michangsheng.FriendlyLianDan", "更友好的炼丹", "0.1.0")]
     public class Plugin : BaseUnityPlugin
     {
+        public delegate void Log(object data);
+        public static Log LogDebug;
         static ConfigEntry<bool> OnlyShowProductable;
         static ConfigEntry<bool> GenerateAllDanFang;
         static ConfigEntry<bool> OrderByHerbsCost;
@@ -23,20 +25,16 @@ namespace FriendlyLianDan
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
             GenerateAllDanFang = Config.Bind("DanFangGenerator", "GenerateAllDanFang", true, "生成所有药性符合的丹方");
-            MaxHerbsNum = Config.Bind("DanFangGenerator", "MaxHerbsNum", 14, "丹方生成器最大的药草数量");
+            MaxHerbsNum = Config.Bind("DanFangGenerator", "MaxHerbsNum", 12, "丹方生成器最大的药草数量");
 
             OnlyShowProductable = Config.Bind("DanFangHelper", "OnlyShowProductable", true, "仅展示可炼制的丹方");
             OrderByHerbsCost = Config.Bind("DanFangHelper", "OrderByHerbsCost", true, "丹方根据药草的成本排序");
 
-
             Harmony.CreateAndPatchAll(typeof(Plugin));
+            Harmony.CreateAndPatchAll(typeof(PatchDanFangList.PatchGetNoSameDanFangList));
             Harmony.CreateAndPatchAll(typeof(PatchDanFangList));
             LogDebug = Logger.LogDebug;
         }
-
-
-        public delegate void Log(object data);
-        public static Log LogDebug;
 
         public void Update()
         {
@@ -72,11 +70,13 @@ namespace FriendlyLianDan
 
         [HarmonyPatch(typeof(GUIPackage.Inventory2), "Show_Tooltip")]
         [HarmonyPostfix]
-        public static void PatchInventory2Show_Tooltip(GUIPackage.Inventory2 __instance, ref GUIPackage.item Item) {
+        public static void PatchInventory2Show_Tooltip(GUIPackage.Inventory2 __instance, ref GUIPackage.item Item)
+        {
             TooltipItem component = __instance.Tooltip.GetComponent<TooltipItem>();
 
             var itemNumText = string.Format("已有:{0}\n", Tools.instance.getPlayer().getItemNum(Item.itemID));
-            if (!component.Label2.text.StartsWith("已有")) {
+            if (!component.Label2.text.StartsWith("已有"))
+            {
                 component.Label2.text = itemNumText + component.Label2.text;
             }
         }
@@ -88,10 +88,13 @@ namespace FriendlyLianDan
             {
                 public static bool Prefix(ref DanFangPageManager __instance, ref Dictionary<int, List<JSONObject>> __result, ref DanFangPageManager.DanFangPingJie ___danFangPingJie)
                 {
+                    LogDebug($"Calling getNoSameDanFangList: {GenerateAllDanFang.Value}");
+
                     if (!GenerateAllDanFang.Value)
                     {
                         return true;
                     }
+
                     __result = new Dictionary<int, List<JSONObject>>();
 
                     if (___danFangPingJie == DanFangPageManager.DanFangPingJie.所有)
@@ -151,10 +154,13 @@ namespace FriendlyLianDan
 
                 [HarmonyPatch(typeof(DanFangPageManager), "addDanFang")]
                 [HarmonyPrefix]
-                public static bool patchAddDanFang(ref JSONObject obj){
+                public static bool patchAddDanFang(ref JSONObject obj)
+                {
                     // 如果自动生成丹方, 那么新的单方仅加入丹方清单, 不在 UI 展示
-                    if (GenerateAllDanFang.Value) {
-                        if (!hasSameDanFang(obj, Tools.instance.getPlayer().DanFang.list)) {
+                    if (GenerateAllDanFang.Value)
+                    {
+                        if (!hasSameDanFang(obj, Tools.instance.getPlayer().DanFang.list))
+                        {
                             Tools.instance.getPlayer().DanFang.list.Add(obj);
                         }
                         return false;
@@ -185,8 +191,10 @@ namespace FriendlyLianDan
             private static AllDanFangs instance = null;
             private static readonly object _lock = new object();
             public Dictionary<int, List<JSONObject>> danfangs = null;
+            public int maxNum;
             private AllDanFangs(int maxNum = 14)
             {
+                this.maxNum = maxNum;
                 danfangs = new Dictionary<int, List<JSONObject>>();
                 foreach (var item in ItemSystem.Loaders.Items.FilterByType(ItemSystem.WuPingType.丹药))
                 {
@@ -207,12 +215,13 @@ namespace FriendlyLianDan
             {
                 get
                 {
-                    if (instance == null)
+                    if (instance == null || instance.maxNum != MaxHerbsNum.Value)
                     {
                         lock (_lock)
                         {
-                            if (instance == null)
+                            if (instance == null || instance.maxNum != MaxHerbsNum.Value)
                             {
+                                LogDebug($"正在初始化 AllDanFangs: {MaxHerbsNum.Value}");
                                 instance = new AllDanFangs(MaxHerbsNum.Value);
                             }
                         }
