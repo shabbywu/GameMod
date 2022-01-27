@@ -11,3 +11,5 @@ dotnet build michangsheng/InstantlyForgeAndRefine -o bin/michangsheng --configur
 dotnet build michangsheng/CollectGains -o bin/michangsheng --configuration Release
 dotnet build michangsheng/ForgetWuDaoSkill -o bin/michangsheng --configuration Release
 dotnet build michangsheng/FriendlyLianDan -o bin/michangsheng --configuration Release
+dotnet build michangsheng/StrengthenDongfu -o bin/michangsheng --configuration Release
+dotnet build michangsheng/BetterTooltips -o bin/michangsheng --configuration Release

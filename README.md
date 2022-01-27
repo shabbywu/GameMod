@@ -55,6 +55,16 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 - 仅展示可炼制的丹方
 - 丹方按药草的价值排序
 
+### StrengthenDongfu(强化洞府)
+
+提高在洞府中的修炼和灵田的效率。
+
+### BetterTooltips(更好的 Tooltips 弹窗)
+
+增加物品栏中的 Tooltips 弹窗的信息
+- 展示药草可以炼制的丹药
+- 展示药草的产地
+
 ## FAQ
 1. 如何开发新的 Mod
 ```bash
