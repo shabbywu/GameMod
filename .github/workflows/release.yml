@@ -47,3 +47,5 @@ jobs:
           bin/michangsheng/CollectGains.dll
           bin/michangsheng/ForgetWuDaoSkill.dll
           bin/michangsheng/FriendlyLianDan.dll
+          bin/michangsheng/BetterTooltips.dll
+
