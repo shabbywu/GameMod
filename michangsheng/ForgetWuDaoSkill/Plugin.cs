@@ -89,8 +89,10 @@ namespace ForgetWuDaoSkill
                 case 3:
                     // 未达到领悟条件
                     ____go.GetComponent<Tab.TabListener>().mouseUpEvent.AddListener(delegate() {
-                        UIPopTip.Inst.Pop("未达到领悟条件", PopTipIconType.叹号);
-                        WuDaoTooltip.Close();
+                        WuDaoTooltip.Show(icon.sprite, instance.Id, delegate(){
+                            LogDebug("calling Study");
+                            Study(instance);
+                        });
                     });
                     break;
             }
