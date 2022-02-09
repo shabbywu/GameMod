@@ -6,10 +6,11 @@ using HarmonyLib;
 using Tab;
 using System.Collections.Generic;
 using ItemSystem.Models;
+using System.Diagnostics;
 
 namespace FriendlyLianDan
 {
-    [BepInPlugin("cn.shabywu.michangsheng.FriendlyLianDan", "更友好的炼丹", "0.1.0")]
+    [BepInPlugin("cn.shabywu.michangsheng.FriendlyLianDan", "更友好的炼丹", "1.0.0")]
     public class Plugin : BaseUnityPlugin
     {
         public delegate void Log(object data);
@@ -18,6 +19,7 @@ namespace FriendlyLianDan
         static ConfigEntry<bool> GenerateAllDanFang;
         static ConfigEntry<bool> OrderByHerbsCost;
         static ConfigEntry<int> MaxHerbsNum;
+        static List<Harmony> _harmonys = new List<Harmony>();
 
         private void Awake()
         {
@@ -30,10 +32,25 @@ namespace FriendlyLianDan
             OnlyShowProductable = Config.Bind("DanFangHelper", "OnlyShowProductable", true, "仅展示可炼制的丹方");
             OrderByHerbsCost = Config.Bind("DanFangHelper", "OrderByHerbsCost", true, "丹方根据药草的成本排序");
 
-            Harmony.CreateAndPatchAll(typeof(Plugin));
-            Harmony.CreateAndPatchAll(typeof(PatchDanFangList.PatchGetNoSameDanFangList));
-            Harmony.CreateAndPatchAll(typeof(PatchDanFangList));
+            _harmonys.Add(Harmony.CreateAndPatchAll(typeof(Plugin)));
+            _harmonys.Add(Harmony.CreateAndPatchAll(typeof(PatchDanFangList.PatchGetNoSameDanFangList)));
+            _harmonys.Add(Harmony.CreateAndPatchAll(typeof(PatchDanFangList)));
             LogDebug = Logger.LogDebug;
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var harmony in _harmonys)
+            {
+                try
+                {
+                    harmony.UnpatchSelf();
+                }
+                catch (System.Exception e)
+                {
+                    LogDebug($"Failto Unpatch Harmony for reason: {e.Message}");
+                }
+            }
         }
 
         public void Update()
@@ -88,15 +105,16 @@ namespace FriendlyLianDan
             {
                 public static bool Prefix(ref DanFangPageManager __instance, ref Dictionary<int, List<JSONObject>> __result, ref DanFangPageManager.DanFangPingJie ___danFangPingJie)
                 {
-                    LogDebug($"Calling getNoSameDanFangList: {GenerateAllDanFang.Value}");
-
                     if (!GenerateAllDanFang.Value)
                     {
+                        LogDebug("[getNoSameDanFangList] SKip Generate AllDanFang");
                         return true;
                     }
 
+                    Stopwatch sw = new Stopwatch();
                     __result = new Dictionary<int, List<JSONObject>>();
 
+                    sw.Start();
                     if (___danFangPingJie == DanFangPageManager.DanFangPingJie.所有)
                     {
                         __result = AllDanFangs.Instance.danfangs;
@@ -113,12 +131,16 @@ namespace FriendlyLianDan
                             }
                         }
                     }
+                    sw.Stop();
+                    LogDebug($"[getNoSameDanFangList] Filter AllDanFangs cost: {sw.ElapsedMilliseconds}ms");
                     return false;
                 }
 
                 public static void Postfix(ref DanFangPageManager __instance, ref Dictionary<int, List<JSONObject>> __result)
                 {
                     // 过滤所有可生产的丹方;
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
                     if (OnlyShowProductable.Value)
                     {
                         var result = new Dictionary<int, List<JSONObject>>();
@@ -137,7 +159,11 @@ namespace FriendlyLianDan
                             }
                         }
                         __result = result;
+                        sw.Stop();
+                        LogDebug($"[getNoSameDanFangList] Filter Productable DanFang cost: {sw.ElapsedMilliseconds}ms");
+                        sw.Restart();
                     }
+
 
                     // 按照材料的价格排序
                     if (OrderByHerbsCost.Value)
@@ -149,6 +175,8 @@ namespace FriendlyLianDan
                                 return CalculateDanFangCost(a).CompareTo(CalculateDanFangCost(b));
                             });
                         }
+                        sw.Stop();
+                        LogDebug($"[getNoSameDanFangList] Order DanFang By HerbsCost cost: {sw.ElapsedMilliseconds}ms");
                     }
                 }
 
@@ -183,8 +211,64 @@ namespace FriendlyLianDan
                     }
                 }
             }
-        }
 
+            [HarmonyPatch(typeof(DanFangParentCell), "init")]
+            [HarmonyPrefix]
+            static bool PatchDanFangParentCellInit(ref DanFangParentCell __instance, ref Text ___danFangNameText, ref Vector2 ___startSizeDelta, ref GameObject ___DanFangChildCell, ref GameObject ___CanLianZhiImage, ref Button ___btnDanFang)
+            {
+                ___startSizeDelta = __instance.transform.GetComponent<RectTransform>().sizeDelta;
+                if (__instance.DanFangID != -1)
+                {
+                    ___danFangNameText.text = Tools.Code64(jsonData.instance.ItemJsonData[__instance.DanFangID.ToString()]["name"].str);
+                    __instance.childDanFangChildCellList = new List<DanFangChildCell>();
+                    Tools.ClearObj(___DanFangChildCell.transform);
+                    __instance.updateState();
+                    ___btnDanFang.onClick.AddListener(__instance.clickDanFang);
+                }
+                return false;
+            }
+
+            [HarmonyPatch(typeof(DanFangParentCell), "clickDanFang")]
+            [HarmonyPrefix]
+            static bool PatchDanFangParentCellClickDanFang(ref DanFangParentCell __instance, ref GameObject ___DanFangChildCell)
+            {
+                if (__instance.childDanFangChildCellList.Count != 0 || __instance.DanFangID == -1)
+                {
+                    return true;
+                }
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                __instance.finallyIndex = -1;
+                for (int i = 0; i < __instance.childs.Count; i++)
+                {
+                    DanFangChildCell component = Tools.InstantiateGameObject(___DanFangChildCell, ___DanFangChildCell.transform.parent).GetComponent<DanFangChildCell>();
+                    component.danFang = __instance.childs[i];
+                    component.init();
+                    __instance.childDanFangChildCellList.Add(component);
+                    __instance.finallyIndex++;
+                }
+                __instance.childDanFangChildCellList[__instance.finallyIndex].hideLine();
+
+                LogDebug($"Lazy Init DanFangParentCell(id: {__instance.DanFangID}, nums: {__instance.childs.Count}), cost: {sw.ElapsedMilliseconds}ms");
+                return true;
+            }
+
+            [HarmonyPatch(typeof(DanFangParentCell), "updateState")]
+            [HarmonyPrefix]
+            static bool PatchDanFangParentCellUpdateState(ref DanFangParentCell __instance, ref GameObject ___CanLianZhiImage)
+            {
+                if (LianDanSystemManager.inst.DanFangPageManager.checkCanLianZhi(__instance.childs))
+                {
+                    ___CanLianZhiImage.SetActive(true);
+                }
+                else
+                {
+                    ___CanLianZhiImage.SetActive(false);
+                }
+                return false;
+            }
+        }
 
         public class AllDanFangs
         {
@@ -221,9 +305,14 @@ namespace FriendlyLianDan
                         {
                             if (instance == null || instance.maxNum != MaxHerbsNum.Value)
                             {
+                                Stopwatch sw = new Stopwatch();
+                                sw.Start();
                                 LogDebug($"正在初始化 AllDanFangs: {MaxHerbsNum.Value}");
                                 instance = new AllDanFangs(MaxHerbsNum.Value);
+                                sw.Stop();
+                                LogDebug($"初始化 AllDanFangs 成功, 耗时: {sw.ElapsedMilliseconds}ms");
                             }
+
                         }
                     }
                     return instance;
