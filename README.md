@@ -45,7 +45,8 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 
 ### ForgetWuDaoSkill(遗忘悟道技能)
 
-可在学习悟道技能的界面中直接遗忘悟道技能。
+可在学习悟道技能的界面中直接遗忘悟道技能。   
+bugfix: 修复无法查看未达到领悟条件的技能信息(by https://github.com/Cherrysaber)
 
 ### FriendlyLianDan(更友好的炼丹体验)
 
@@ -54,6 +55,7 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 - 自动计算所有炼丹丹方
 - 仅展示可炼制的丹方
 - 丹方按药草的价值排序
+- 优化炼丹丹方展示逻辑, 延迟加载丹方列表, 减少资源开销。
 
 ### StrengthenDongfu(强化洞府)
 
