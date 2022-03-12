@@ -4,7 +4,7 @@ using HarmonyLib;
 
 namespace ShoterLearnTime
 {
-    [BepInPlugin("cn.shabywu.michangsheng.ShoterLearnTime", "缩短功法学习/突破时间", "0.1.0")]
+    [BepInPlugin("cn.shabywu.michangsheng.ShoterLearnTime", "缩短功法学习/突破时间", "0.2.0")]
     public class Plugin : BaseUnityPlugin
     {
 
@@ -22,8 +22,8 @@ namespace ShoterLearnTime
             // Plugin startup logic
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
-            ShorterBaseWuXin = Config.Bind("ShoterLearnTime",  "ShorterStudyBaseWuXin", 10, "基础悟性");
-            ShorterNeedWuxin = Config.Bind("ShoterLearnTime",  "ShorterTuPoMultipiler", 10, "缩短一倍时间所需悟性");
+            ShorterBaseWuXin = Config.Bind("ShoterLearnTime",  "ShorterBaseWuXin", 10, "基础悟性");
+            ShorterNeedWuxin = Config.Bind("ShoterLearnTime",  "ShorterNeedWuxin", 10, "缩短一倍时间所需悟性");
             Harmony.CreateAndPatchAll(typeof(Plugin));
 
             LogDebug = Logger.LogDebug;
@@ -37,9 +37,10 @@ namespace ShoterLearnTime
             if (player.ToString() == ""){
                 return; // 未进入游戏
             }
-            if player.wuXin < ShorterBaseWuXin.Value{
-                return;
+            if (player.wuXin < ShorterBaseWuXin.Value){
+                return; // 小于基础悟性
             }
+            // 根据悟性缩短突破时间
             ratio = 1 + ( (int)player.wuXin - ShorterBaseWuXin.Value ) / ShorterNeedWuxin.Value;
             __result /= ratio;
             // __result /= ShorterTuPoMultipiler.Value;
@@ -54,9 +55,10 @@ namespace ShoterLearnTime
             if (player.ToString() == ""){
                 return; // 未进入游戏
             }
-            if player.wuXin < ShorterBaseWuXin.Value{
-                return;
+            if (player.wuXin < ShorterBaseWuXin.Value){
+                return; // 小于基础悟性
             }
+            // 根据悟性缩短学习时间
             ratio = 1 + ( (int)player.wuXin - ShorterBaseWuXin.Value ) / ShorterNeedWuxin.Value;
             __result /= ratio;
             // __result /= ShorterStudyMultipiler.Value;
