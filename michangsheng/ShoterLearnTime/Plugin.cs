@@ -31,7 +31,13 @@ namespace ShoterLearnTime
         [HarmonyPatch(typeof(Tools), "getStudiStaticSkillTime")] // Specify target method with HarmonyPatch attribute
         [HarmonyPostfix]                              // There are different patch types. Prefix code runs before original code
         static void patchGetStudiStaticSkillTime(ref int __result){
-            __result /= ShorterTuPoMultipiler.Value;
+            player = Tools.instance.getPlayer();    // 获取玩家 
+            if (player.ToString() == ""){
+                return; // 未进入游戏
+            }
+            Value = player.wuXin / 10
+            __result /= Value;
+            // __result /= ShorterTuPoMultipiler.Value;
             LogDebug("calling patched Tools::getStudiStaticSkillTime result: " + __result);
         }
 
@@ -39,7 +45,13 @@ namespace ShoterLearnTime
         [HarmonyPatch(typeof(Tools), "getStudiSkillTime")] // Specify target method with HarmonyPatch attribute
         [HarmonyPostfix]                              // There are different patch types. Prefix code runs before original code
         static void patchGetStudiSkillTime(ref int __result){
-            __result /= ShorterStudyMultipiler.Value;
+            player = Tools.instance.getPlayer();    // 获取玩家 
+            if (player.ToString() == ""){
+                return; // 未进入游戏
+            }
+            Value = player.wuXin / 10
+            __result /= Value;
+            // __result /= ShorterStudyMultipiler.Value;
             LogDebug("calling patched Tools::getStudiSkillTime result: " + __result);
         }
     }
