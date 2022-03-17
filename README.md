@@ -22,6 +22,7 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 ### BattleGains(提高战斗收益)
 
 调整战斗胜利后的收益, 例如物品掉落倍率, 金钱掉落倍率, 装备掉落倍率。
+- minor: 降低默认倍率至 2, 任务物品、丹方等类型的物品只掉落1份。
 
 ### BetterShoppingExperience(更好的商店体验)
 
@@ -38,6 +39,7 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 ### ShoterLearnTime(缩短学习时间)
 
 调整学习、突破功法的耗时，可在配置中调整倍率
+- fix: 修复稳定版本 0.9.1.130 后功能不可用的问题, 并增加一种根据悟性动态控制缩短倍率的方案
 
 ### WuDaoGains(悟道收益调整)
 
