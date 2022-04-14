@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using ItemSystem;
 
 namespace ItemSystem.Models
 {
@@ -61,10 +59,10 @@ namespace ItemSystem.Models
             {
                 return null;
             }
-            ItemSystem.Loaders.Item herb = ItemSystem.Loaders.Items.GetByItemID(itemID);
+            var herb = ItemSystem.Shims.Items.GetByItemID(itemID);
 
             return new YaoXing(
-                kind: (int)herb.GetType().GetProperty($"yaoZhi{kind}").GetValue(herb),
+                kind: (int)herb.GetType().GetField($"yaoZhi{kind}").GetValue(herb),
                 intensity: QualityFactor[herb.quality] * num
             );
         }

@@ -18,7 +18,7 @@ namespace FriendlyLianDan
             this.maxNum = maxNum;
         }
 
-        public IEnumerable<ItemSystem.Loaders.DanFang> Generator(bool fuzzy = false)
+        public IEnumerable<ItemSystem.Shims.DanFang> Generator(bool fuzzy = false)
         {
             if (target.danfang == null) {
                 yield break;
@@ -39,7 +39,7 @@ namespace FriendlyLianDan
                             {
                                 if (ValidateNeutralize(intro.herbs.intro, main1.herbs, main2.herbs, deputy1.herbs, deputy2.herbs))
                                 {
-                                    var danfang = new ItemSystem.Loaders.DanFang();
+                                    var danfang = new ItemSystem.Shims.DanFang();
                                     danfang.name = target.name;
                                     danfang.ItemID = target.id;
                                     danfang.castTime = target.costTime;

@@ -1,10 +1,9 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using ItemSystem;
+using JSONClass;
 
-namespace ItemSystem.Loaders
+namespace ItemSystem.Shims
 {
     [Serializable]
     public class DanFang
@@ -23,21 +22,27 @@ namespace ItemSystem.Loaders
         public int num3 { get; set; }
         public int num4 { get; set; }
         public int num5 { get; set; }
-        public override string ToString () {
+        public override string ToString()
+        {
             StringBuilder sb = new StringBuilder($"丹方<{ItemID} {name}>{{\n", 64);
-            if (value1 != 0) {
+            if (value1 != 0)
+            {
                 sb.AppendFormat("\t药引id: {0}, 用量: {1}\n", Items.GetByItemID(value1).ToString(), num1);
             }
-            if (value2 != 0) {
+            if (value2 != 0)
+            {
                 sb.AppendFormat("\t主药1: {0}, 用量: {1}\n", Items.GetByItemID(value2).ToString(), num2);
             }
-            if (value3 != 0) {
+            if (value3 != 0)
+            {
                 sb.AppendFormat("\t主药1: {0}, 用量: {1}\n", Items.GetByItemID(value3).ToString(), num3);
             }
-            if (value4 != 0) {
+            if (value4 != 0)
+            {
                 sb.AppendFormat("\t副药1: {0}, 用量: {1}\n", Items.GetByItemID(value4).ToString(), num4);
             }
-            if (value5 != 0) {
+            if (value5 != 0)
+            {
                 sb.AppendFormat("\t副药2: {0}, 用量: {1}\n", Items.GetByItemID(value5).ToString(), num5);
             }
             sb.Append("}");
@@ -45,29 +50,34 @@ namespace ItemSystem.Loaders
         }
 
         // 转换为游戏中 DanFang.list 中存储的 JSONObject 对象
-        public JSONObject ToJSONObject () {
-			JSONObject jsonobject = new JSONObject(JSONObject.Type.OBJECT);
-			JSONObject values = new JSONObject(JSONObject.Type.ARRAY);
-			JSONObject nums = new JSONObject(JSONObject.Type.ARRAY);
+        public JSONObject ToJSONObject()
+        {
+            JSONObject jsonobject = new JSONObject(JSONObject.Type.OBJECT);
+            JSONObject values = new JSONObject(JSONObject.Type.ARRAY);
+            JSONObject nums = new JSONObject(JSONObject.Type.ARRAY);
 
-            foreach(var v in new int[]{value1, value2, value3, value4, value5}){
+            foreach (var v in new int[] { value1, value2, value3, value4, value5 })
+            {
                 values.Add(v);
             }
 
-            foreach(var n in new int[]{num1, num2, num3, num4, num5}){
+            foreach (var n in new int[] { num1, num2, num3, num4, num5 })
+            {
                 nums.Add(n);
             }
 
             int cost = 0;
-            for(int i = 0; i < values.Count; i++) {
-                if (values[i].I != 0) {
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (values[i].I != 0)
+                {
                     cost += Items.GetByItemID(values[i].I).price * nums[i].I;
                 }
             }
 
-			jsonobject.AddField("ID", ItemID);
-			jsonobject.AddField("Type", values);
-			jsonobject.AddField("Num", nums);
+            jsonobject.AddField("ID", ItemID);
+            jsonobject.AddField("Type", values);
+            jsonobject.AddField("Num", nums);
 
             // extra fields
             jsonobject.AddField("__Cost", cost);
@@ -80,10 +90,10 @@ namespace ItemSystem.Loaders
     {
         private static DanFangs instance = null;
         private static readonly object _lock = new object();
-        private static string path = "Effect/json/d_LianDan.py.DanFangBiao";
         public IDictionary<int, DanFang> danfangs;
 
-        public static IEnumerable<DanFang> List() {
+        public static IEnumerable<DanFang> List()
+        {
             return Instance.danfangs.Values;
         }
 
@@ -95,11 +105,36 @@ namespace ItemSystem.Loaders
         private DanFangs()
         {
             danfangs = new Dictionary<int, DanFang>();
-            string data = ModResources.LoadText(path);
-            Dictionary<string, DanFang> loaded = JsonConvert.DeserializeObject<Dictionary<string, DanFang>>(data);
-            foreach (KeyValuePair<string, DanFang> kv in loaded)
+            if (LianDanDanFangBiao.DataList.Count == 0)
             {
-                danfangs[kv.Value.ItemID] = kv.Value;
+                LianDanDanFangBiao.InitDataDict();
+            }
+            foreach (var item in LianDanDanFangBiao.DataList)
+            {
+                var danfang = new DanFang();
+
+                danfang.id = item.id;
+                danfang.name = item.name;
+                danfang.ItemID = item.ItemID;
+
+                danfang.value1 = item.value1;
+                danfang.num1 = item.num1;
+
+                danfang.value2 = item.value2;
+                danfang.num2 = item.num2;
+
+                danfang.value3 = item.value3;
+                danfang.num3 = item.num3;
+
+                danfang.value4 = item.value4;
+                danfang.num4 = item.num4;
+
+                danfang.value5 = item.value5;
+                danfang.num5 = item.num5;
+
+                danfang.castTime = item.castTime;
+
+                danfangs[item.ItemID] = danfang;
             }
         }
 

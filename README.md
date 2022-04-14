@@ -55,6 +55,10 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 - 仅展示可炼制的丹方
 - 丹方按药草的价值排序
 
+更新: 1.0.0:
+- 修复由于新版的炼丹界面重构导致的挂载点失效的问题
+- 修改数据源, 不再直接读取 json 文件, 而是使用内置模块 JSONClass 完成数据加载.
+
 ### StrengthenDongfu(强化洞府)
 
 提高在洞府中的修炼和灵田的效率。
