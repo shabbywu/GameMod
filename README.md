@@ -22,6 +22,7 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 ### BattleGains(提高战斗收益)
 
 调整战斗胜利后的收益, 例如物品掉落倍率, 金钱掉落倍率, 装备掉落倍率。
+- minor: 降低默认倍率至 2, 任务物品、丹方等类型的物品只掉落1份。
 
 ### BetterShoppingExperience(更好的商店体验)
 
@@ -38,6 +39,7 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 ### ShoterLearnTime(缩短学习时间)
 
 调整学习、突破功法的耗时，可在配置中调整倍率
+- fix: 修复稳定版本 0.9.1.130 后功能不可用的问题, 并增加一种根据悟性动态控制缩短倍率的方案
 
 ### WuDaoGains(悟道收益调整)
 
@@ -45,7 +47,8 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 
 ### ForgetWuDaoSkill(遗忘悟道技能)
 
-可在学习悟道技能的界面中直接遗忘悟道技能。
+可在学习悟道技能的界面中直接遗忘悟道技能。   
+bugfix: 修复无法查看未达到领悟条件的技能信息(by https://github.com/Cherrysaber)
 
 ### FriendlyLianDan(更友好的炼丹体验)
 
@@ -54,6 +57,7 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 - 自动计算所有炼丹丹方
 - 仅展示可炼制的丹方
 - 丹方按药草的价值排序
+- 优化炼丹丹方展示逻辑, 延迟加载丹方列表, 减少资源开销。
 
 更新: 1.0.0:
 - 修复由于新版的炼丹界面重构导致的挂载点失效的问题
