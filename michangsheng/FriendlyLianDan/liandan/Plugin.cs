@@ -124,7 +124,7 @@ namespace FriendlyLianDan
                     {
                         Id = id,
                         Name = _ItemJsonData.DataDict[id].name,
-                        DanFangBases = new List<DanFangBase>() { ItemSystem.Loaders.DanFangs.GetByDanYaoID(id).ToJSONObject().ToDanFangBase() }
+                        DanFangBases = new List<DanFangBase>() { ItemSystem.Shims.DanFangs.GetByDanYaoID(id).ToJSONObject().ToDanFangBase() }
                     });
                 }
 
@@ -227,7 +227,7 @@ namespace FriendlyLianDan
             {
                 if (obj["Type"][i].I != 0)
                 {
-                    cost += ItemSystem.Loaders.Items.GetByItemID(obj["Type"][i].I).price * obj["Num"][i].I;
+                    cost += ItemSystem.Shims.Items.GetByItemID(obj["Type"][i].I).price * obj["Num"][i].I;
                 }
             }
             obj.AddField("__Cost", cost);
@@ -245,7 +245,7 @@ namespace FriendlyLianDan
             {
                 this.maxNum = maxNum;
                 danfangs = new Dictionary<int, List<JSONObject>>();
-                foreach (var item in ItemSystem.Loaders.Items.FilterByType(ItemSystem.WuPingType.丹药))
+                foreach (var item in ItemSystem.Shims.Items.FilterByType(ItemSystem.WuPingType.丹药))
                 {
                     var danyao = new DanYao(item.id);
                     foreach (var danfang in new Emulator(danyao, maxNum: maxNum).Generator())

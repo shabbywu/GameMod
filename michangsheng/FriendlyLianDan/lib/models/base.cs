@@ -1,27 +1,27 @@
 using System;
-using ItemSystem;
+using JSONClass;
 
 namespace ItemSystem.Models
 {
     public abstract class BaseModel
     {
-        public ItemSystem.Loaders.Item _base;
+        public _ItemJsonData _base;
         public int id;
         public string name;
         public int quality;
         public WuPingType type;
         public BaseModel(int itemID)
         {
-            _base = ItemSystem.Loaders.Items.GetByItemID(itemID);
+            _base = ItemSystem.Shims.Items.GetByItemID(itemID);
             id = _base.id;
             name = _base.name;
             quality = _base.quality;
-            type = _base.type;
+            type = (WuPingType)_base.type;
         }
 
         public override string ToString()
         {
-            return _base.ToString();
+            return $"{Enum.GetName(typeof(WuPingType), type)}<{id}: {name}>";
         }
     }
 }
