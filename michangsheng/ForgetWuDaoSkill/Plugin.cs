@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace ForgetWuDaoSkill
 {
-    [BepInPlugin("cn.shabywu.michangsheng.ForgetWuDaoSkill", "遗忘悟道技能", "0.1.0")]
+    [BepInPlugin("cn.shabywu.michangsheng.ForgetWuDaoSkill", "遗忘悟道技能", "1.0.0")]
     public class Plugin : BaseUnityPlugin
     {
 
@@ -70,7 +70,6 @@ namespace ForgetWuDaoSkill
                     ____go.GetComponent<Tab.TabListener>().mouseUpEvent.AddListener(delegate()
                     {
                         WuDaoTooltip.Show(icon.sprite, -instance.Id, delegate(){
-                            LogDebug("calling Forget");
                             Forget(instance);
                         });
 
@@ -81,7 +80,6 @@ namespace ForgetWuDaoSkill
                     ____go.GetComponent<Tab.TabListener>().mouseUpEvent.AddListener(delegate()
                     {
                         WuDaoTooltip.Show(icon.sprite, instance.Id, delegate(){
-                            LogDebug("calling Study");
                             Study(instance);
                         });
                     });
@@ -89,8 +87,9 @@ namespace ForgetWuDaoSkill
                 case 3:
                     // 未达到领悟条件
                     ____go.GetComponent<Tab.TabListener>().mouseUpEvent.AddListener(delegate() {
-                        UIPopTip.Inst.Pop("未达到领悟条件", PopTipIconType.叹号);
-                        WuDaoTooltip.Close();
+                        WuDaoTooltip.Show(icon.sprite, instance.Id, delegate(){
+                            Study(instance);
+                        });
                     });
                     break;
             }

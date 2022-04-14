@@ -3,6 +3,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using Fight;
+using JSONClass;
 
 namespace BattleGains
 {
@@ -24,9 +25,9 @@ namespace BattleGains
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
 
             EquipmentDropMultiplier = Config.Bind("BattleGains",  "EquipmentDropMultiplier", 1, "装备掉落倍率");
-            ItemDropMultiplier = Config.Bind("BattleGains",  "ItemDropMultiplier", 5, "物品掉落倍率");
+            ItemDropMultiplier = Config.Bind("BattleGains",  "ItemDropMultiplier", 2, "物品掉落倍率");
 
-            MoneyDropMultipiler = Config.Bind("BattleGains",  "MoneyDropMultipiler", 5f, "金钱掉落倍率");
+            MoneyDropMultipiler = Config.Bind("BattleGains",  "MoneyDropMultipiler", 2f, "金钱掉落倍率");
             Harmony.CreateAndPatchAll(typeof(Plugin));
 
             LogDebug = Logger.LogDebug;
@@ -103,8 +104,36 @@ namespace BattleGains
 
         [HarmonyPatch(typeof(NpcDrop), "buidTempItem")] // Specify target method with HarmonyPatch attribute
         [HarmonyPrefix]
-        static bool multipleDroppedItem(ref int ItemNum){
-            ItemNum *= ItemDropMultiplier.Value;
+        static bool multipleDroppedItem(ref int ItemID, ref int ItemNum){
+            var multiple = ItemDropMultiplier.Value;
+            try
+            {
+			    _ItemJsonData itemJsonData = _ItemJsonData.DataDict[ItemID];
+                var type = (ItemTypes)itemJsonData.type;
+
+                switch (type) {
+                    case ItemTypes.武器:
+                    case ItemTypes.衣服:
+                    case ItemTypes.饰品:
+                        multiple = EquipmentDropMultiplier.Value;
+                        break;
+                    case ItemTypes.技能书:
+                    case ItemTypes.功法:
+                    case ItemTypes.任务:
+                    case ItemTypes.丹方:
+                    case ItemTypes.书籍:
+                    case ItemTypes.秘籍:
+                        multiple = 1;
+                        break;
+                }
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+            
+            ItemNum *= multiple;
             return true;
         }
     }
