@@ -36,6 +36,9 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 
 调整炼丹、炼器的耗时为0
 
+更新: 1.0.0:
+- 修复由于新版的炼丹界面重构导致的挂载点失效的问题
+
 ### ShoterLearnTime(缩短学习时间)
 
 调整学习、突破功法的耗时，可在配置中调整倍率
