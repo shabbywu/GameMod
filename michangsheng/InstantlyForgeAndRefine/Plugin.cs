@@ -1,6 +1,5 @@
-﻿using BepInEx;
+using BepInEx;
 using HarmonyLib;
-script.NewLianDan.LianDan;
 
 namespace InstantlyForgeAndRefine
 {
@@ -30,7 +29,7 @@ namespace InstantlyForgeAndRefine
             }
         }
 
-        [HarmonyPatch(typeof(LianDanPanel), "StartLianDan")]
+        [HarmonyPatch(typeof(script.NewLianDan.LianDan.LianDanPanel), "StartLianDan")]
         public class InstantlyRefine {
             static readonly object _object = new object(); 
 
