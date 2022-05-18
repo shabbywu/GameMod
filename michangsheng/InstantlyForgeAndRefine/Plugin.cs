@@ -4,7 +4,7 @@ script.NewLianDan.LianDan;
 
 namespace InstantlyForgeAndRefine
 {
-    [BepInPlugin("cn.shabywu.michangsheng.InstantlyForgeAndRefine", "瞬间炼器和炼丹", "0.1.0")]
+    [BepInPlugin("cn.shabywu.michangsheng.InstantlyForgeAndRefine", "瞬间炼器和炼丹", "1.0.0")]
     public class Plugin : BaseUnityPlugin
     {
 
