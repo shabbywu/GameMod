@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using HarmonyLib;
+script.NewLianDan.LianDan;
 
 namespace InstantlyForgeAndRefine
 {
@@ -29,7 +30,7 @@ namespace InstantlyForgeAndRefine
             }
         }
 
-        [HarmonyPatch(typeof(LianDanResultManager), "lianDanJieSuan")]
+        [HarmonyPatch(typeof(LianDanPanel), "StartLianDan")]
         public class InstantlyRefine {
             static readonly object _object = new object(); 
 
@@ -38,7 +39,7 @@ namespace InstantlyForgeAndRefine
             [HarmonyPrefix]
             static void Prefix()
             {
-                LogDebug("before lianDanJieSuan");
+                LogDebug("before LianDanPanel::StartLianDan");
                 if (singleton == null) {
                     lock (_object) {
                         LogDebug("patch Avatar::AddTime");
@@ -59,14 +60,14 @@ namespace InstantlyForgeAndRefine
                         }
                     } 
                 }
-                LogDebug("after lianDanJieSuan");
+                LogDebug("after LianDanPanel::StartLianDan");
             }
         }
 
         public class AvatarPatcher
         {
-            [HarmonyPatch(typeof(KBEngine.Avatar), "AddTime")] // Specify target method with HarmonyPatch attribute
-            [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
+            [HarmonyPatch(typeof(KBEngine.Avatar), "AddTime")]
+            [HarmonyPrefix]
             static bool patchAvatarAddTime(){
                 LogDebug("Avatar::AddTime, skip add any time.");
                 return false;
