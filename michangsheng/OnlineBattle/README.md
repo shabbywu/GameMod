@@ -27,6 +27,9 @@
         - ResetRound 重置回合
         - UseSkill 使用技能
         - useAI 自动对局(依赖策略树)
+    - UI 逻辑
+        - UIFightSkillItem::ClickSkill 选中技能, 实际上调用了 RoundManager.SetChoiceSkill
+        - UIFightWeaponItem::ClickSkill 释放武器技能, 实际上是设置了 RoundManager.ChoiceSkill 再触发 RoundManager.UseSkill
 
 
 

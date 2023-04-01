@@ -19,6 +19,7 @@ jobs:
       run: |
         dotnet build TheLastSpellMod/UnlimitedReroll -o bin/TheLastSpellMod --configuration Release
         dotnet build TheLastSpellMod/MultipleGain -o bin/TheLastSpellMod --configuration Release
+        dotnet build "Tainted Grail/MultipleGain" -o "bin/Tainted Grail" --configuration Release
         dotnet build michangsheng/BattleGains -o bin/michangsheng --configuration Release
         dotnet build michangsheng/WuDaoGains -o bin/michangsheng --configuration Release
         dotnet build michangsheng/ShoterLearnTime -o bin/michangsheng --configuration Release
