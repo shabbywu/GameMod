@@ -26,7 +26,7 @@ namespace MultipleGain
             Harmony.CreateAndPatchAll(typeof(Plugin));
         }
 
-        [HarmonyPatch(typeof(GameData.Currency), "Earn", new Type[] { typeof(double)})] // Specify target method with HarmonyPatch attribute
+        [HarmonyPatch(typeof(GameData.Currency), "Earn",typeof(double))] // Specify target method with HarmonyPatch attribute
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool patchCurrencyEarn(ref double amount)
         {
