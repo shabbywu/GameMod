@@ -26,12 +26,10 @@ namespace MultipleGain
             Harmony.CreateAndPatchAll(typeof(Plugin));
         }
 
-        [HarmonyPatch(typeof(GameData.Currency), "Earn")] // Specify target method with HarmonyPatch attribute
+        [HarmonyPatch(typeof(GameData.Currency), "Earn", new Type[] { typeof(double)})] // Specify target method with HarmonyPatch attribute
         [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
         static bool patchCurrencyEarn(ref double amount)
         {
-            // value *= ExperiencePercentage.Value;
-            // Console.WriteLine($"patchExperienceGain: {value}");
             GameData.Currency.gold.multiplier.AddOrUpdate(GoldPercentage, GoldPercentage.Value);
             GameData.Currency.darkQuartz.multiplier.AddOrUpdate(DarkQuartzPercentage, DarkQuartzPercentage.Value);
             GameData.Currency.bone.multiplier.AddOrUpdate(BonePercentage, BonePercentage.Value);
