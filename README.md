@@ -1,4 +1,47 @@
 # 游戏Mod
+
+## [小骨：英雄杀手(Skul: The Hero Slayer)](https://store.steampowered.com/app/1147560/Skul_The_Hero_Slayer/)
+
+本项目所有 Mod 均基于 BepInEx 框架开发。由于 **Skul: The Hero Slayer** 精简了 `Unity` 的部分库, 需要手动解压缺失的 `Unity` 才能正常启动 `BepInEx`。
+
+### 小骨：英雄杀手 Mod 安装方式
+假设 `$(SkulDirectory)` 是 Skul.exe 所在的文件夹。
+对于 Windows，通常是: `C:\Program Files (x86)\Steam\steamapps\common\Skul` 或者其他类似的路径。
+
+* 下载并解压 [Unstripped Unity files 2020.3.34](https://unity.bepinex.dev/libraries/2020.3.34.zip) 到 `$(SkulDirectory)\Skul_Data\Managed\`
+
+* 下载并解压 [Unstripped corelibs 2020.3.34](https://unity.bepinex.dev/corlibs/2020.3.34.zip) 到 `$(SkulDirectory)\Skul_Data\Managed\`
+
+* 下载并解压 [BepInEx 5.4.21](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.21) 到 `$(SkulDirectory)`
+  * Windows 系统: [x64](https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x64_5.4.21.0.zip)
+  * Linux 系统: [unix](https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_unix_5.4.21.0.zip)
+
+* 下载 [你需要的Mod](https://github.com/shabbywu/GameMod/releases) 到 `$(SkulDirectory)/BepInEx/plugins`
+    * 如果 `$(SkulDirectory)/BepInEx/plugins` 目录不存在, 手动创建即可
+
+## Mod 介绍
+### MultipleGain(多倍收益)
+使用该 Mod 后, 可根据配置调整收益倍率(支持 Gold、DarkQuartz、Bone、HeartQuartz)
+
+## FAQ
+1. 如何开发新的 Mod
+
+1.1. 从模板创建 Mod 项目
+```bash
+dotnet new bepinex5plugin -T netstandard2.0 -U 2020.3.34 -n {Your-Mod-Name}
+```
+
+1.2. 添加 lib 到 Mod 项目
+```xml
+# 编辑 {Your-Mod-Name}/{Your-Mod-Name}.csproj 在 Project 中追加以下内容
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>../lib/Assembly-CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+```
+
+
 ## [最后的咒语](https://store.steampowered.com/app/1105670/)
 本项目所有 Mod 均基于 BepInEx 框架开发. [如何安装 BepInEx 框架](https://docs.bepinex.dev/master/articles/user_guide/installation/index.html)
 

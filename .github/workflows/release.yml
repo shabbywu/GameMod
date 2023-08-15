@@ -17,18 +17,7 @@ jobs:
         dotnet-version: '5.0.x'
     - name: Build
       run: |
-        dotnet build TheLastSpellMod/UnlimitedReroll -o bin/TheLastSpellMod --configuration Release
-        dotnet build TheLastSpellMod/MultipleGain -o bin/TheLastSpellMod --configuration Release
-        dotnet build michangsheng/BattleGains -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/WuDaoGains -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/ShoterLearnTime -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/BetterShoppingExperience -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/InstantlyForgeAndRefine -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/CollectGains -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/ForgetWuDaoSkill -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/FriendlyLianDan -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/StrengthenDongfu -o bin/michangsheng --configuration Release
-        dotnet build michangsheng/BetterTooltips -o bin/michangsheng --configuration Release
+        .scripts/build.sh
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
@@ -37,16 +26,6 @@ jobs:
       with:
         files: |
           Release.txt
-          bin/TheLastSpellMod/UnlimitedReroll.dll
-          bin/TheLastSpellMod/MultipleGain.dll
-          bin/michangsheng/BattleGains.dll
-          bin/michangsheng/WuDaoGains.dll
-          bin/michangsheng/ShoterLearnTime.dll
-          bin/michangsheng/BetterShoppingExperience.dll
-          bin/michangsheng/InstantlyForgeAndRefine.dll
-          bin/michangsheng/CollectGains.dll
-          bin/michangsheng/ForgetWuDaoSkill.dll
-          bin/michangsheng/FriendlyLianDan.dll
-          bin/michangsheng/StrengthenDongfu.dll
-          bin/michangsheng/BetterTooltips.dll
-
+          bin/TheLastSpellMod/*.dll
+          bin/michangsheng/*.dll
+          bin/Skul.Mod/*.dll

@@ -13,3 +13,6 @@ dotnet build michangsheng/ForgetWuDaoSkill -o bin/michangsheng --configuration R
 dotnet build michangsheng/FriendlyLianDan -o bin/michangsheng --configuration Release
 dotnet build michangsheng/StrengthenDongfu -o bin/michangsheng --configuration Release
 dotnet build michangsheng/BetterTooltips -o bin/michangsheng --configuration Release
+
+@echo "build all mod in Skul.Mod"
+dotnet build Skul.Mod/MultipleGain -o bin/Skul.Mod --configuration Release
