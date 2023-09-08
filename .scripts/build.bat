@@ -16,3 +16,4 @@ dotnet build michangsheng/BetterTooltips -o bin/michangsheng --configuration Rel
 
 @echo "build all mod in Skul.Mod"
 dotnet build Skul.Mod/MultipleGain -o bin/Skul.Mod --configuration Release
+dotnet build Skul.Mod/DropRarity -o bin/Skul.Mod --configuration Release
