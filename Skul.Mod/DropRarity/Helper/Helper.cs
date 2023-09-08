@@ -15,10 +15,7 @@ namespace DropRarity
         public static void LogInfo(object data) {
             Logger.LogInfo(data);
         }
-        /// <summary>
-        /// Returns the minial rarity depending on the current chapter.
-        /// Later Chapters have higher rarity
-        /// </summary>
+        
         public static Rarity GetMinialRarity(Rarity fallback = Rarity.Common)
         {
             Chapter.Type chapterType = Singleton<Service>.Instance.levelManager.currentChapter.type;
