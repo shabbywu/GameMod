@@ -2,7 +2,8 @@
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using TheLastStand.Definition.Unit.Enemy;
+using TheLastStand.Model.Unit;
+using TheLastStand.Manager;
 
 namespace MultipleGain
 {
@@ -22,21 +23,20 @@ namespace MultipleGain
             Harmony.CreateAndPatchAll(typeof(Plugin));
         }
 
-        [HarmonyPatch(typeof(EnemyUnitTemplateDefinition), "ExperienceGain", MethodType.Setter)] // Specify target method with HarmonyPatch attribute
-        [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
-        static bool patchExperienceGain(ref float value)
+        [HarmonyPatch(typeof(Unit), "ExperienceGain", MethodType.Getter)] // Specify target method with HarmonyPatch attribute
+        [HarmonyPostfix]
+        static void patchUnitExperienceGain(ref float __result)
         {
-            value *= ExperiencePercentage.Value;
-            Console.WriteLine($"patchExperienceGain: {value}");
-            return true;
+            __result *= ExperiencePercentage.Value;
+            Console.WriteLine($"patch ExperienceGain: {__result}");
         }
 
-        [HarmonyPatch(typeof(EnemyUnitTemplateDefinition), "DamnedSoulsEarned", MethodType.Setter)] // Specify target method with HarmonyPatch attribute
-        [HarmonyPrefix]                              // There are different patch types. Prefix code runs before original code
-        static bool patchDamnedSoulsEarned(ref int value)
+        [HarmonyPatch(typeof(TrophyManager), "AddEnemyKill"] // Specify target method with HarmonyPatch attribute
+        [HarmonyPrefix]
+        static bool patchTrophyManagerAddEnemyKill(ref int damnedSoulsEarned)
         {
-            value = Convert.ToInt32(value * DamnedSoulsPercentage.Value);
-            Console.WriteLine($"patchDamnedSoulsEarned: {value}");
+            damnedSoulsEarned = Convert.ToInt32(damnedSoulsEarned * DamnedSoulsPercentage.Value);
+            Console.WriteLine($"patch AddEnemyKill: {damnedSoulsEarned}");
             return true;
         }
     }
