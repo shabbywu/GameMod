@@ -31,7 +31,7 @@ namespace MultipleGain
             Console.WriteLine($"patch ExperienceGain: {__result}");
         }
 
-        [HarmonyPatch(typeof(TrophyManager), "AddEnemyKill"] // Specify target method with HarmonyPatch attribute
+        [HarmonyPatch(typeof(TrophyManager), "AddEnemyKill")] // Specify target method with HarmonyPatch attribute
         [HarmonyPrefix]
         static bool patchTrophyManagerAddEnemyKill(ref int damnedSoulsEarned)
         {
