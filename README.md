@@ -47,7 +47,7 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2020.3.34 -n {Your-Mod-Name}
 
 ## Mod 介绍
 ### UnlimitedReroll(无限重投)
-使用该 Mod 后, 升级后将可无限刷新加点选项.
+使用该 Mod 后, 升级后将可无限刷新加点选项、禁用商店刷新价格上涨或商店0刷新消耗(默认禁用)、增加每晚战利品刷新次数。
 
 ### MultipleGain(多倍收益)
 使用该 Mod 后, 可根据配置提高每晚的收益(经验和污秽精华)
