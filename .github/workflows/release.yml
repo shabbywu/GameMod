@@ -17,7 +17,7 @@ jobs:
         dotnet-version: '5.0.x'
     - name: Build
       run: |
-        .scripts/build.sh
+        make build
         echo ${{ github.sha }} > Release.txt
         cat Release.txt
     - name: Release
@@ -26,6 +26,4 @@ jobs:
       with:
         files: |
           Release.txt
-          bin/TheLastSpellMod/*.dll
-          bin/michangsheng/*.dll
-          bin/Skul.Mod/*.dll
+          bin/*.dll
