@@ -63,9 +63,10 @@ namespace UnlimitedReroll
         // 每晚奖励额外重摇次数
         [HarmonyPatch(typeof(PanicRewardController), "ReloadBaseNbRerollReward")]
         [HarmonyPostfix]
-        static void PatchReloadBaseNbRerollReward(ref int __result)
+        static void PatchReloadBaseNbRerollReward(ref PanicRewardController __instance, ref int __result)
         {
             __result += ExtraPanicRewardRerollNumber.Value;
+            __instance.PanicReward.BaseNbRerollReward = __result;
         }
 
         // 商品刷新价格不变化
