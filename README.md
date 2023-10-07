@@ -45,9 +45,24 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2020.3.34 -n {Your-Mod-Name}
 ## [最后的咒语](https://store.steampowered.com/app/1105670/)
 本项目所有 Mod 均基于 BepInEx 框架开发. [如何安装 BepInEx 框架](https://docs.bepinex.dev/master/articles/user_guide/installation/index.html)
 
+## 最后的咒语 Mod 安装方式
+假设 `$(TheLastSpellDirectory)` 是 `The Last Spell.exe` 所在的文件夹。
+对于 Windows，通常是: `C:\Program Files (x86)\Steam\steamapps\common\The Last Spell` 或者其他类似的路径。
+
+
+* 下载并解压 [BepInEx 5.4.21](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.21) 到 `$(TheLastSpellDirectory)`
+  * Windows 系统: [x64](https://github.com/BepInEx/BepInEx/releases/download/v5.4.21/BepInEx_x64_5.4.21.0.zip)
+
+* 下载 [你需要的Mod](https://github.com/shabbywu/GameMod/releases) 到 `$(TheLastSpellDirectory)/BepInEx/plugins`
+    * 如果 `$(TheLastSpellDirectory)/BepInEx/plugins` 目录不存在, 手动创建即可
+
 ## Mod 介绍
 ### UnlimitedReroll(无限重投)
-使用该 Mod 后, 升级后将可无限刷新加点选项、禁用商店刷新价格上涨或商店0刷新消耗(默认禁用)、增加每晚战利品刷新次数。
+使用该 Mod 后, 游戏内的刷新按钮将可以执行多次(或无限次, 取决于你的配置), 以下是该 Mod 提供的功能
+- 升级后将可无限刷新加点选项(不减少刷新次数)
+- 禁用商店刷新价格上涨
+- 商店0刷新消耗(由于过于影响平衡性默认不启用, 可以通过配置项启用该功能)
+- 增加每晚战利品刷新次数(默认配置额外增加 10 次刷新次数)
 
 ### MultipleGain(多倍收益)
 使用该 Mod 后, 可根据配置提高每晚的收益(经验和污秽精华)
