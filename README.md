@@ -27,7 +27,10 @@
 1. 如何开发新的 Mod
 
 1.1. 从模板创建 Mod 项目
+
+通过以下命令可创建适用于 小骨：英雄杀手 的 Mod 模板
 ```bash
+# `-T netstandard2.0 -U 2020.3.34` 是 小骨：英雄杀手 的专用参数
 dotnet new bepinex5plugin -T netstandard2.0 -U 2020.3.34 -n {Your-Mod-Name}
 ```
 
@@ -40,6 +43,10 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2020.3.34 -n {Your-Mod-Name}
     </Reference>
   </ItemGroup>
 ```
+
+1.3 找到需要 Patch 的代码
+
+常见的游戏 Mod 都是通过 Patch 方式修改游戏执行逻辑, 所以需要先反编译游戏源码, 如果你不会反编译游戏源码, [这里](https://github.com/shabbywu/Skul-Decompile) 有反编译好的游戏源码可供参考.
 
 
 ## [最后的咒语](https://store.steampowered.com/app/1105670/)
@@ -69,9 +76,28 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2020.3.34 -n {Your-Mod-Name}
 
 ## FAQ
 1. 如何开发新的 Mod
+
+1.1. 从模板创建 Mod 项目
+通过以下命令可创建适用于 最后的咒语的 Mod 模板
 ```bash
+# `-T netstandard2.0 -U 2018.4.36` 是 最后的咒语 的专用参数
 dotnet new bepinex5plugin -T netstandard2.0 -U 2018.4.36 -n {Your-Mod-Name}
 ```
+
+1.2. 添加 lib 到 Mod 项目
+```xml
+# 编辑 {Your-Mod-Name}/{Your-Mod-Name}.csproj 在 Project 中追加以下内容
+  <ItemGroup>
+    <Reference Include="TheLastStand">
+      <HintPath>../lib/TheLastStand.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+```
+
+1.3 找到需要 Patch 的代码
+
+常见的游戏 Mod 都是通过 Patch 方式修改游戏执行逻辑, 所以需要先反编译游戏源码, 如果你不会反编译游戏源码, [这里](https://github.com/shabbywu/TheLastSpell-Decompile) 有反编译好的游戏源码可供参考.
+
 
 ## [觅长生](https://store.steampowered.com/app/1189490/)
 本项目所有 Mod 均基于 BepInEx 框架开发. [如何安装 BepInEx 框架](https://docs.bepinex.dev/master/articles/user_guide/installation/index.html)
@@ -136,6 +162,25 @@ bugfix: 修复无法查看未达到领悟条件的技能信息(by https://github
 
 ## FAQ
 1. 如何开发新的 Mod
+
+1.1. 从模板创建 Mod 项目
+通过以下命令可创建适用于 觅长生 的 Mod 模板
 ```bash
+# `-T net46 -U 2018.4.36` 是觅长生的专用参数
 dotnet new bepinex5plugin -T net46 -U 2018.4.36 -n {Your-Mod-Name}
 ```
+
+1.2. 添加 lib 到 Mod 项目
+```xml
+# 编辑 {Your-Mod-Name}/{Your-Mod-Name}.csproj 在 Project 中追加以下内容
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>../lib/Assembly-CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+```
+
+1.3 找到需要 Patch 的代码
+
+常见的游戏 Mod 都是通过 Patch 方式修改游戏执行逻辑, 所以需要先反编译游戏源码, 如果你不会反编译游戏源码, [这里](https://github.com/shabbywu/michangsheng) 有反编译好的游戏源码可供参考.
+
