@@ -151,7 +151,7 @@ namespace ForgetPerk
 					soulsTextDisplay = gameObject.AddComponent<ResourceTextDisplay>();
 				}
                 typeof(ResourceTextDisplay).GetField("text", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(soulsTextDisplay, soulsText);
-                soulsTextDisplay.RefreshValue(-(int)DamnedSoulsCost.Value, () => ObjectPooler.GetPooledComponent<GainDamnedSoulsDisplay>("GainDamnedSoulsDisplay", ResourcePooler.LoadOnce<GainDamnedSoulsDisplay>("Prefab/Displayable Effect/UI Effect Displays/GainDamnedSoulsDisplay", failSilently: false), null, dontSetParent: false));
+                soulsTextDisplay.RefreshValue((int)ApplicationManager.Application.DamnedSouls, () => ObjectPooler.GetPooledComponent<GainDamnedSoulsDisplay>("GainDamnedSoulsDisplay", ResourcePooler.LoadOnce<GainDamnedSoulsDisplay>("Prefab/Displayable Effect/UI Effect Displays/GainDamnedSoulsDisplay", failSilently: false), null, dontSetParent: false));
             }
 
             public MethodInfo OnSetNewPerk {
