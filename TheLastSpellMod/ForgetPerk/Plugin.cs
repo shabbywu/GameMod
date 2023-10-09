@@ -53,7 +53,7 @@ namespace ForgetPerk
                     return;
                 }
                 UnitPerkTreeView UnitPerkTreeView = TPSingleton<CharacterSheetPanel>.Instance.UnitPerkTreeView;
-                if ((UnityEngine.Object)SelectedPerk == (UnityEngine.Object)__instance) {
+                if ((UnityEngine.Object)UnitPerkTreeView.SelectedPerk == (UnityEngine.Object)__instance) {
                     LogDebug("OnPerkButtonClick but same perk is selected");
                     return;
                 }
