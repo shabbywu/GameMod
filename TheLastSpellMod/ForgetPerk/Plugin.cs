@@ -45,7 +45,7 @@ namespace ForgetPerk
         }
 
         [HarmonyPatch(typeof(UnitPerkDisplay), "OnPerkButtonClick")]
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         static void OnPerkButtonClick(ref UnitPerkDisplay __instance)
         {
             if ((UnityEngine.Object)__instance == (UnityEngine.Object)null) {
@@ -57,17 +57,17 @@ namespace ForgetPerk
                 LogDebug("on RefreshSelectedPerk but same perk is selected");
                 return;
             }
-            BetterButton trainButton = (BetterButton)typeof(UnitPerkTreeView).GetField("trainButton").GetValue(UnitPerkTreeView);
+            BetterButton trainButton = (BetterButton)typeof(UnitPerkTreeView).GetField("trainButton", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(UnitPerkTreeView);
             // 只有切换到另一个 Perk 时才处理
             refreshTrainButton(ref __instance, ref trainButton);
         }
 
         static void refreshTrainButton(ref UnitPerkDisplay selectedPerk, ref BetterButton trainButton) {
-            TextMeshProUGUI text = (TextMeshProUGUI)typeof(BetterButton).GetField("buttonText").GetValue(trainButton);
+            TextMeshProUGUI text = (TextMeshProUGUI)typeof(BetterButton).GetField("buttonText", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(trainButton);
             text.richText = true;
             if (selectedPerk.Perk != null && selectedPerk.Perk.Unlocked) {
                 LogDebug("set trainButton text to CharacterSheet_ForgetPerkButton");
-                trainButton.ChangeText(Localizer.Format("CharacterSheet_ForgetPerkButton", new List<uint>{DamnedSoulsCost.Value}));
+                trainButton.ChangeText(Localizer.Format("CharacterSheet_ForgetPerkButton", new object[]{DamnedSoulsCost.Value}));
                 trainButton.Interactable = UnitPerkTreeController.CanForgetPerk();
             } else {
                 LogDebug("set trainButton text to CharacterSheet_ValidateButton");
