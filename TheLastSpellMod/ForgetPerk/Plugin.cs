@@ -15,8 +15,12 @@ using TheLastStand.Model.Unit.Perk;
 using TheLastStand.View.Unit.Perk;
 using TheLastStand.Controller.Unit.Perk;
 using TheLastStand.Framework.UI;
+using TheLastStand.Framework;
 using UnityEngine;
 using UnityEngine.UI;
+using TheLastStand.View.Skill.SkillAction.UI;
+using TheLastStand.View;
+using TheLastStand.View.HUD;
 
 namespace ForgetPerk
 {
@@ -136,7 +140,13 @@ namespace ForgetPerk
 
                 // 更新 CharacterSheetPanel 状态
                 TPSingleton<CharacterSheetPanel>.Instance.Refresh();
-                // 更新
+                // 刷新文案并展示动画
+                PhasePanel PhasePanel = GameView.TopScreenPanel.TurnPanel.PhasePanel;
+                PhasePanel.RefreshSoulsText();
+                TextMeshProUGUI soulsText = (TextMeshProUGUI)typeof(PhasePanel).GetField("soulsText", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(PhasePanel);
+                GainDamnedSoulsDisplay effectDisplay = ObjectPooler.GetPooledComponent<GainDamnedSoulsDisplay>("GainDamnedSoulsDisplay", ResourcePooler.LoadOnce<GainDamnedSoulsDisplay>("Prefab/Displayable Effect/UI Effect Displays/GainDamnedSoulsDisplay", failSilently: false), soulsText.transform, dontSetParent: false);
+                effectDisplay.Init(-(int)DamnedSoulsCost.Value);
+                effectDisplay.Display();
             }
 
             public MethodInfo OnSetNewPerk {
