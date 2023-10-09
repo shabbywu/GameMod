@@ -148,7 +148,7 @@ namespace ForgetPerk
 
             public MethodInfo UpdateTiersAvailability {
                 get {
-                    MethodInfo UpdateTiersAvailability = typeof(UnitPerkTreeController).GetMethod("UpdateTiersAvailability", BindingFlags.NonPublic | BindingFlags.Instance);
+                    MethodInfo UpdateTiersAvailability = typeof(UnitPerkTreeController).GetMethod("UpdateTiersAvailability", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] {}, null);
                     return UpdateTiersAvailability;
                 }
             }
