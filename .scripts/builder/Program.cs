@@ -131,6 +131,7 @@ class Program
         // 最后的咒语
         gameModDefinitions["TheLastSpellMod/UnlimitedReroll"] = new ModInfo("TheLastSpell", "UnlimitedReroll");
         gameModDefinitions["TheLastSpellMod/MultipleGain"] = new ModInfo("TheLastSpell", "MultipleGain");
+        gameModDefinitions["TheLastSpellMod/ForgetPerk"] = new ModInfo("TheLastSpell", "ForgetPerk");
 
         // 觅长生
         gameModDefinitions["michangsheng/BattleGains"] = new ModInfo("michangsheng", "BattleGains");

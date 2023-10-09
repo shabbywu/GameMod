@@ -1,6 +1,7 @@
 echo "build all mod in TheLastSpellMod"
 dotnet build TheLastSpellMod/UnlimitedReroll -o bin/TheLastSpellMod --configuration Release
 dotnet build TheLastSpellMod/MultipleGain -o bin/TheLastSpellMod --configuration Release
+dotnet build TheLastSpellMod/ForgetPerk -o bin/TheLastSpellMod --configuration Release
 
 echo "build all mod in michangsheng"
 dotnet build michangsheng/BattleGains -o bin/michangsheng --configuration Release
