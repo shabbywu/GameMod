@@ -45,21 +45,30 @@ namespace ForgetPerk
         }
 
         [HarmonyPatch(typeof(UnitPerkDisplay), "OnPerkButtonClick")]
-        [HarmonyPrefix]
-        static void OnPerkButtonClick(ref UnitPerkDisplay __instance)
-        {
-            if ((UnityEngine.Object)__instance == (UnityEngine.Object)null) {
-                LogDebug("on RefreshSelectedPerk but no perk is selected");
-                return;
+        public class OnPerkButtonClick {
+            static void Prefix(ref UnitPerkDisplay __instance, out bool __state) {
+                __state = false;
+                if ((UnityEngine.Object)__instance == (UnityEngine.Object)null) {
+                    LogDebug("OnPerkButtonClick but no perk is selected");
+                    return;
+                }
+                UnitPerkTreeView UnitPerkTreeView = TPSingleton<CharacterSheetPanel>.Instance.UnitPerkTreeView;
+                if ((UnityEngine.Object)SelectedPerk == (UnityEngine.Object)__instance) {
+                    LogDebug("OnPerkButtonClick but same perk is selected");
+                    return;
+                }
+                __state = true;
             }
-            UnitPerkTreeView UnitPerkTreeView = TPSingleton<CharacterSheetPanel>.Instance.UnitPerkTreeView;
-            if ((UnityEngine.Object)UnitPerkTreeView.SelectedPerk == (UnityEngine.Object)__instance) {
-                LogDebug("on RefreshSelectedPerk but same perk is selected");
-                return;
+
+            static void Postfix(ref UnitPerkDisplay __instance, bool __state)
+            {
+                if (!__state) {
+                    return;
+                }
+                BetterButton trainButton = (BetterButton)typeof(UnitPerkTreeView).GetField("trainButton", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(TPSingleton<CharacterSheetPanel>.Instance.UnitPerkTreeView);
+                // 只有切换到另一个 Perk 时才处理
+                refreshTrainButton(ref __instance, ref trainButton);
             }
-            BetterButton trainButton = (BetterButton)typeof(UnitPerkTreeView).GetField("trainButton", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(UnitPerkTreeView);
-            // 只有切换到另一个 Perk 时才处理
-            refreshTrainButton(ref __instance, ref trainButton);
         }
 
         static void refreshTrainButton(ref UnitPerkDisplay selectedPerk, ref BetterButton trainButton) {
