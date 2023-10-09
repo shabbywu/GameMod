@@ -144,7 +144,9 @@ namespace ForgetPerk
                 PhasePanel PhasePanel = GameView.TopScreenPanel.TurnPanel.PhasePanel;
                 PhasePanel.RefreshSoulsText();
                 TextMeshProUGUI soulsText = (TextMeshProUGUI)typeof(PhasePanel).GetField("soulsText", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(PhasePanel);
-                GainDamnedSoulsDisplay effectDisplay = ObjectPooler.GetPooledComponent<GainDamnedSoulsDisplay>("GainDamnedSoulsDisplay", ResourcePooler.LoadOnce<GainDamnedSoulsDisplay>("Prefab/Displayable Effect/UI Effect Displays/GainDamnedSoulsDisplay", failSilently: false), soulsText.transform, dontSetParent: false);
+                GainDamnedSoulsDisplay effectDisplay = ObjectPooler.GetPooledComponent<GainDamnedSoulsDisplay>("GainDamnedSoulsDisplay", ResourcePooler.LoadOnce<GainDamnedSoulsDisplay>("Prefab/Displayable Effect/UI Effect Displays/GainDamnedSoulsDisplay", failSilently: false), EffectManager.EffectDisplaysParent, dontSetParent: false);
+
+                effectDisplay.FollowElement.ChangeTarget(((Component)soulsText).transform);
                 effectDisplay.Init(-(int)DamnedSoulsCost.Value);
                 effectDisplay.Display();
             }
