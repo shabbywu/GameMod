@@ -51,7 +51,7 @@ namespace ForgetPerk
             if (selectedPerk.Perk != null && selectedPerk.Perk.Unlocked) {
                 LogDebug("set trainButton text to CharacterSheet_ForgetPerkButton");
                 trainButton.ChangeText(Localizer.Format("CharacterSheet_ForgetPerkButton", new object[]{DamnedSoulsCost.Value}));
-                trainButton.Interactable = UnitPerkTreeController.CanForgetPerk();
+                trainButton.Interactable = UnitPerkTreeControllerExt.CanForgetPerk();
             } else {
                 LogDebug("set trainButton text to CharacterSheet_ValidateButton");
                 trainButton.ChangeText(Localizer.Get("CharacterSheet_ValidateButton"));
@@ -89,16 +89,16 @@ namespace ForgetPerk
             UnitPerkTree UnitPerkTree = __instance.UnitPerkTree;
             UnitPerkDisplay SelectedPerk = __instance.SelectedPerk;
             if (SelectedPerk.Perk.Unlocked) {
-                (new UnitPerkTreeController(UnitPerkTree)).ForgetPerk();
+                (new UnitPerkTreeControllerExt(UnitPerkTree)).ForgetPerk();
                 return false;
             }
             return true;
         }
 
-        public class UnitPerkTreeController {
+        public class UnitPerkTreeControllerExt {
             public UnitPerkTree UnitPerkTree;
 
-            public UnitPerkTreeController(UnitPerkTree UnitPerkTree) {
+            public UnitPerkTreeControllerExt(UnitPerkTree UnitPerkTree) {
                 this.UnitPerkTree = UnitPerkTree;
             }
 
@@ -114,23 +114,23 @@ namespace ForgetPerk
                 if (!CanForgetPerk()) {
                     return;
                 }
+                UnitPerkDisplay SelectedPerk = UnitPerkTree.UnitPerkTreeView.SelectedPerk;
                 LogDebug("ForgetPerk!!!");
                 // 添加特性点
                 UnitPerkTree.PlayableUnit.PerksPoints++;
                 // 扣除污秽精华
                 ApplicationManager.Application.DamnedSouls -= DamnedSoulsCost.Value;
                 // 锁上特性
-                UnitPerkTree.UnitPerkTreeView.SelectedPerk.Perk.PerkController.Lock();
+                SelectedPerk.Perk.PerkController.Lock();
                 // 刷新选择的 UnitPerkTreeView 状态
-                UnitPerkTree.UnitPerkTreeView.RefreshSelectedPerk(UnitPerkTree.UnitPerkTreeView.SelectedPerk);
+                UnitPerkTree.UnitPerkTreeView.RefreshSelectedPerk(SelectedPerk);
                 UnitPerkTree.UnitPerkTreeView.RefreshPerkPoints();
                 // 更新按钮文案
-                UnitPerkDisplay SelectedPerk = UnitPerkTree.UnitPerkTreeView.SelectedPerk;
                 refreshTrainButton(ref SelectedPerk);
 
                 // 触发回调 perk 更新
                 // UnitPerkTree.UnitPerkTreeController.OnSetNewPerk(UnitPerkTree.UnitPerkTreeView.SelectedPerk.PerkDefinition.Id, UnitPerkTree.UnitPerkTreeView.SelectedPerk.Perk);
-                OnSetNewPerk.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{UnitPerkTree.UnitPerkTreeView.SelectedPerk.PerkDefinition.Id, UnitPerkTree.UnitPerkTreeView.SelectedPerk.Perk});
+                OnSetNewPerk.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{SelectedPerk.PerkDefinition.Id, SelectedPerk.Perk});
                 //UnitPerkTree.UnitPerkTreeController.UpdateTiersAvailability();
                 UpdateTiersAvailability.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{});
 
@@ -141,6 +141,8 @@ namespace ForgetPerk
 
             public MethodInfo OnSetNewPerk {
                 get {
+                    
+
                     MethodInfo OnSetNewPerk = typeof(UnitPerkTreeController).GetMethod("OnSetNewPerk", BindingFlags.NonPublic | BindingFlags.Instance);
                     return OnSetNewPerk;
                 }
@@ -148,7 +150,7 @@ namespace ForgetPerk
 
             public MethodInfo UpdateTiersAvailability {
                 get {
-                    MethodInfo UpdateTiersAvailability = typeof(UnitPerkTreeController).GetMethod("UpdateTiersAvailability", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] {}, null);
+                    MethodInfo UpdateTiersAvailability = typeof(UnitPerkTreeController).GetMethod("UpdateTiersAvailability", BindingFlags.NonPublic | BindingFlags.Instance);
                     return UpdateTiersAvailability;
                 }
             }
