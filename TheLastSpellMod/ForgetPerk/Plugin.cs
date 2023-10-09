@@ -130,9 +130,9 @@ namespace ForgetPerk
 
                 // 触发回调 perk 更新
                 // UnitPerkTree.UnitPerkTreeController.OnSetNewPerk(UnitPerkTree.UnitPerkTreeView.SelectedPerk.PerkDefinition.Id, UnitPerkTree.UnitPerkTreeView.SelectedPerk.Perk);
-                OnSetNewPerk.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{SelectedPerk.PerkDefinition.Id, SelectedPerk.Perk});
+                OnSetNewPerk.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{SelectedPerk.PerkDefinition.Id, SelectedPerk.Perk, true});
                 //UnitPerkTree.UnitPerkTreeController.UpdateTiersAvailability();
-                UpdateTiersAvailability.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{});
+                UpdateTiersAvailability.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{0, true});
 
                 // 更新 CharacterSheetPanel 状态
                 TPSingleton<CharacterSheetPanel>.Instance.Refresh();
@@ -141,8 +141,6 @@ namespace ForgetPerk
 
             public MethodInfo OnSetNewPerk {
                 get {
-                    
-
                     MethodInfo OnSetNewPerk = typeof(UnitPerkTreeController).GetMethod("OnSetNewPerk", BindingFlags.NonPublic | BindingFlags.Instance);
                     return OnSetNewPerk;
                 }
