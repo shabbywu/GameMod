@@ -142,13 +142,16 @@ namespace ForgetPerk
                 TPSingleton<CharacterSheetPanel>.Instance.Refresh();
                 // 刷新文案并展示动画
                 PhasePanel PhasePanel = GameView.TopScreenPanel.TurnPanel.PhasePanel;
-                PhasePanel.RefreshSoulsText();
                 TextMeshProUGUI soulsText = (TextMeshProUGUI)typeof(PhasePanel).GetField("soulsText", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(PhasePanel);
-                GainDamnedSoulsDisplay effectDisplay = ObjectPooler.GetPooledComponent<GainDamnedSoulsDisplay>("GainDamnedSoulsDisplay", ResourcePooler.LoadOnce<GainDamnedSoulsDisplay>("Prefab/Displayable Effect/UI Effect Displays/GainDamnedSoulsDisplay", failSilently: false), EffectManager.EffectDisplaysParent, dontSetParent: false);
 
-                effectDisplay.FollowElement.ChangeTarget(((Component)soulsText).transform);
-                effectDisplay.Init(-(int)DamnedSoulsCost.Value);
-                effectDisplay.Display();
+                GameObject gameObject = soulsText.gameObject;
+                ResourceTextDisplay soulsTextDisplay = gameObject.GetComponent<ResourceTextDisplay>();
+				if ((UnityEngine.Object)soulsTextDisplay == (UnityEngine.Object)null)
+				{
+					soulsTextDisplay = gameObject.AddComponent<ResourceTextDisplay>();
+				}
+                typeof(ResourceTextDisplay).GetField("text", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(soulsTextDisplay, soulsText);
+                soulsTextDisplay.RefreshValue(-(int)DamnedSoulsCost.Value, () => ObjectPooler.GetPooledComponent<GainDamnedSoulsDisplay>("GainDamnedSoulsDisplay", ResourcePooler.LoadOnce<GainDamnedSoulsDisplay>("Prefab/Displayable Effect/UI Effect Displays/GainDamnedSoulsDisplay", failSilently: false), null, dontSetParent: false));
             }
 
             public MethodInfo OnSetNewPerk {
