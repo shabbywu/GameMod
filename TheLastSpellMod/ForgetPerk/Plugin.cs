@@ -180,7 +180,7 @@ namespace ForgetPerk
                 bool flag = true;
                 for (; i < UnitPerkTree.UnitPerkTiers.Count; i++)
                 {
-                    if (UnitPerkTree.UnitPerkTiers[i].RequiredPerksCount <= UnitPerkTree.PlayableUnit.UnlockedPerksCount)
+                    if (UnitPerkTree.UnitPerkTiers[i].RequiredPerksCount > UnitPerkTree.PlayableUnit.UnlockedPerksCount)
                     {
                         UnitPerkTree.UnitPerkTiers[i].UnitPerkTierController.UnitPerkTier.Available = false;
                     }
