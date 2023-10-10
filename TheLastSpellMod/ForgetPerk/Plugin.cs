@@ -8,23 +8,27 @@ using HarmonyLib;
 using TMPro;
 using TPLib;
 using TPLib.Localization;
-using TheLastStand.Model;
-using TheLastStand.Manager;
-using TheLastStand.View.CharacterSheet;
-using TheLastStand.Model.Unit.Perk;
-using TheLastStand.View.Unit.Perk;
-using TheLastStand.Controller.Unit.Perk;
-using TheLastStand.Framework.UI;
 using TheLastStand.Framework;
+using TheLastStand.Framework.UI;
+
+using TheLastStand.Manager;
+using TheLastStand.Manager.Unit;
+using TheLastStand.Model;
+using TheLastStand.Model.Unit.Perk;
+using TheLastStand.Controller.Unit.Perk;
+using TheLastStand.View;
+using TheLastStand.View.CharacterSheet;
+using TheLastStand.View.Generic;
+using TheLastStand.View.HUD;
+using TheLastStand.View.Skill.SkillAction.UI;
+using TheLastStand.View.Unit.Perk;
+
 using UnityEngine;
 using UnityEngine.UI;
-using TheLastStand.View.Skill.SkillAction.UI;
-using TheLastStand.View;
-using TheLastStand.View.HUD;
 
 namespace ForgetPerk
 {
-    [BepInPlugin("cn.shabywu.the_last_stand.forget_perk", "遗忘特性", "1.0.0")]
+    [BepInPlugin("cn.shabywu.the_last_stand.forget_perk", "遗忘天赋", "1.0.0")]
     public class Plugin : BaseUnityPlugin
     {
         static ConfigEntry<uint> DamnedSoulsCost;
@@ -46,6 +50,9 @@ namespace ForgetPerk
         private void setupText() {
             Localizer.Set("简体中文", "CharacterSheet_ForgetPerkButton", "遗忘 {0}<sprite=23>");
             Localizer.Set("English", "CharacterSheet_ForgetPerkButton", "Forget {0}<sprite=23>");
+
+            Localizer.Set("简体中文", "CharacterSheet_ForgetPerkConsentText", "遗忘天赋需要 {0}<sprite=23>, 遗忘后将返还天赋点。");
+            Localizer.Set("English", "CharacterSheet_ForgetPerkConsentText", "Forgetting the perk requires {0}<sprite=23>, and the perk point will be returned after forgetting.");
         }
 
         static void refreshTrainButton(ref UnitPerkDisplay selectedPerk) {
@@ -93,7 +100,12 @@ namespace ForgetPerk
             UnitPerkTree UnitPerkTree = __instance.UnitPerkTree;
             UnitPerkDisplay SelectedPerk = __instance.SelectedPerk;
             if (SelectedPerk.Perk.Unlocked) {
-                (new UnitPerkTreeControllerExt(UnitPerkTree)).ForgetPerk();
+                GenericConsent.Open(Localizer.Format(
+                    "CharacterSheet_ForgetPerkConsentText", 
+                    new object[] { DamnedSoulsCost.Value }), 
+                    delegate {(new UnitPerkTreeControllerExt(UnitPerkTree)).ForgetPerk();}, 
+                    delegate {LogDebug("取消遗忘操作");}
+                );
                 return false;
             }
             return true;
