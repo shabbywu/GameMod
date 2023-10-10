@@ -148,7 +148,7 @@ namespace ForgetPerk
                 // UnitPerkTree.UnitPerkTreeController.OnSetNewPerk(UnitPerkTree.UnitPerkTreeView.SelectedPerk.PerkDefinition.Id, UnitPerkTree.UnitPerkTreeView.SelectedPerk.Perk);
                 OnSetNewPerk.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{SelectedPerk.PerkDefinition.Id, SelectedPerk.Perk, true});
                 //UnitPerkTree.UnitPerkTreeController.UpdateTiersAvailability();
-                UpdateTiersAvailability.Invoke(UnitPerkTree.UnitPerkTreeController, new object[]{0, true});
+                UpdateTiersAvailability();
 
                 // 更新 CharacterSheetPanel 状态
                 TPSingleton<CharacterSheetPanel>.Instance.Refresh();
@@ -173,10 +173,21 @@ namespace ForgetPerk
                 }
             }
 
-            public MethodInfo UpdateTiersAvailability {
-                get {
-                    MethodInfo UpdateTiersAvailability = typeof(UnitPerkTreeController).GetMethod("UpdateTiersAvailability", BindingFlags.NonPublic | BindingFlags.Instance);
-                    return UpdateTiersAvailability;
+            // 锁上不符合要求的特性栏
+            private void UpdateTiersAvailability(int startIndex = 1, bool refreshView = true)
+            {
+                int i = startIndex;
+                bool flag = true;
+                for (; i < UnitPerkTree.UnitPerkTiers.Count; i++)
+                {
+                    if (UnitPerkTree.UnitPerkTiers[i].RequiredPerksCount <= UnitPerkTree.PlayableUnit.UnlockedPerksCount)
+                    {
+                        UnitPerkTree.UnitPerkTiers[i].UnitPerkTierController.UnitPerkTier.Available = false;
+                    }
+                    if (refreshView)
+                    {
+                        UnitPerkTree.UnitPerkTiers[i].UnitPerkTierView.RefreshAvailability(true);
+                    }
                 }
             }
         }
