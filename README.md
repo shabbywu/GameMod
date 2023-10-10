@@ -76,6 +76,11 @@ dotnet new bepinex5plugin -T netstandard2.0 -U 2020.3.34 -n {Your-Mod-Name}
 
 默认配置不改变金币和材料的倍率, 以免过分影响平衡性
 
+### ForgetPerk(遗忘天赋)
+使用该 Mod 后, 可通过消耗污秽精华遗忘角色已学习的天赋。
+
+默认配置遗忘天赋需消耗 500 污秽精华
+
 ## FAQ
 1. 如何开发新的 Mod
 
