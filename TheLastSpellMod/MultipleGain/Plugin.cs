@@ -3,6 +3,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using TheLastStand.Controller.Panic;
+using TheLastStand.Model;
 using TheLastStand.Model.Unit;
 using TheLastStand.Manager;
 
@@ -16,10 +17,14 @@ namespace MultipleGain
         static ConfigEntry<float> PanicRewardGoldPercentage;
         static ConfigEntry<float> PanicRewardMaterialsPercentage;
 
+        public delegate void Log(object data);
+        public static Log LogDebug;
+
         private void Awake()
         {
             // Plugin startup logic
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+            LogDebug = Logger.LogDebug;
 
             ExperiencePercentage = Config.Bind("TheLastStand.MultipleGain",  "ExperiencePercentage", 1.5f, "经验倍率");
             DamnedSoulsPercentage = Config.Bind("TheLastStand.MultipleGain",  "DamnedSoulsPercentage", 10f, "污秽精华倍率");
@@ -28,12 +33,12 @@ namespace MultipleGain
             Harmony.CreateAndPatchAll(typeof(Plugin));
         }
 
-        [HarmonyPatch(typeof(Unit), "ExperienceGain", MethodType.Getter)]
+        [HarmonyPatch(typeof(KillReportData), "TotalBaseExperience", MethodType.Getter)]
         [HarmonyPostfix]
-        static void patchUnitExperienceGain(ref float __result)
+        static void patchKillReportDataTotalBaseExperience(ref float __result)
         {
             __result *= ExperiencePercentage.Value;
-            Console.WriteLine($"patch ExperienceGain: {__result}");
+            LogDebug($"patch TotalBaseExperience: {__result}");
         }
 
         [HarmonyPatch(typeof(TrophyManager), "AddEnemyKill")]
@@ -41,7 +46,7 @@ namespace MultipleGain
         static bool patchTrophyManagerAddEnemyKill(ref int damnedSoulsEarned)
         {
             damnedSoulsEarned = Convert.ToInt32(damnedSoulsEarned * DamnedSoulsPercentage.Value);
-            Console.WriteLine($"patch AddEnemyKill: {damnedSoulsEarned}");
+            LogDebug($"patch damnedSoulsEarned when kill enmery: {damnedSoulsEarned}");
             return true;
         }
 
