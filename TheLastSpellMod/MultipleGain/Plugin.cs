@@ -4,7 +4,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using TheLastStand.Controller.Panic;
 using TheLastStand.Model;
-using TheLastStand.Model.Unit;
+using TheLastStand.Model.Panic;
 using TheLastStand.Manager;
 
 namespace MultipleGain
@@ -50,12 +50,20 @@ namespace MultipleGain
             return true;
         }
 
-        [HarmonyPatch(typeof(PanicRewardController), "GetReward")]
+        [HarmonyPatch(typeof(PanicEvalGoldContext), "RewardValue", MethodType.Getter)]
         [HarmonyPostfix]
-        static void patchGetReward(ref PanicRewardController __instance)
+        static void patchPanicGold(ref int __result)
         {
-            __instance.PanicReward.Gold = Convert.ToInt32(__instance.PanicReward.Gold * PanicRewardGoldPercentage.Value);
-            __instance.PanicReward.Materials = Convert.ToInt32(__instance.PanicReward.Materials * PanicRewardMaterialsPercentage.Value);
+            __result = Convert.ToInt32(__result * PanicRewardGoldPercentage.Value);
+            LogDebug($"patch Panic Gold RewardValue: {__result}");
+        }
+
+        [HarmonyPatch(typeof(PanicEvalMaterialContext), "RewardValue", MethodType.Getter)]
+        [HarmonyPostfix]
+        static void patchPanicMaterial(ref int __result)
+        {
+            __result = Convert.ToInt32(__result * PanicRewardMaterialsPercentage.Value);
+            LogDebug($"patch Panic Material RewardValue: {__result}");
         }
     }
 
