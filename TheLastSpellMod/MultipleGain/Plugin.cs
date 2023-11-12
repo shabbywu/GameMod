@@ -9,7 +9,7 @@ using TheLastStand.Manager;
 
 namespace MultipleGain
 {
-    [BepInPlugin("cn.shabywu.the_last_stand.multiple_gain", "多倍收益", "1.0.0")]
+    [BepInPlugin("cn.shabywu.the_last_stand.multiple_gain", "多倍收益", "1.1.0")]
     public class Plugin : BaseUnityPlugin
     {
         static ConfigEntry<float> ExperiencePercentage;
